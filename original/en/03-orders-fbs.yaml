@@ -4,8 +4,7 @@ info:
   version: order
   description: |
     <div class="description_important">
-      <b>Methods for working with assembly orders of the DBW model (Delivery by Wildberries) are now in a <a href="https://dev.wildberries.ru/en/release-notes?id=312">separate environment</a>.
-    </b>
+      Methods for working with assembly orders of the DBW model (Delivery by Wildberries) are now in a <a href="https://dev.wildberries.ru/en/release-notes?id=312">separate environment</a>.
     </div>
 
     Use the FBS Orders (Fulfillment by Seller) methods to:
@@ -347,9 +346,9 @@ paths:
         Returns a list of all new [assembly orders](/openapi/orders-fbs#tag/FBS-Assembly-Orders/paths/~1api~1v3~1orders/get).
 
         <div class="description_important">
-        Metadata specified in the <code>requiredMeta</code> and <code>optionalMeta</code> fields in assembly orders only affects the ability to transfer a supply to delivery. If your product requires mandatory marking with identification means, you must specify all needed metadata whether it was received in <code>requiredMeta</code> or <code>optionalMeta</code> field (see 4.6 of the <a href ="https://seller.wildberries.ru/confirm-offer-condition/product/view">Offer</a>).
-        <br>
-        We recommend adding all metadata received in the <code>requiredMeta</code> and <code>optionalMeta</code> fields to the assembly orders
+          Metadata specified in the <code>requiredMeta</code> and <code>optionalMeta</code> fields in assembly orders only affects the ability to transfer a supply to delivery. If your product requires mandatory marking with identification means, you must specify all needed metadata whether it was received in <code>requiredMeta</code> or <code>optionalMeta</code> field (see 4.6 of the <a href ="https://seller.wildberries.ru/confirm-offer-condition/product/view">Offer</a>).
+          <br>
+          We recommend adding all metadata received in the <code>requiredMeta</code> and <code>optionalMeta</code> fields to the assembly orders
         </div>
 
         <div class="description_limit">
@@ -866,7 +865,7 @@ paths:
           - `imei` — [IMEI](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1imei/put)
           - `uin` — [UIN](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1uin/put)
           - `gtin` — [GTIN](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1gtin/put)
-          - `sgtin` — [Data matrix code](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1sgtin/put)
+          - `sgtin` — [labeling code Chestny ZNAK](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1sgtin/put)
           - `expiration` — [Expiration date](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1expiration/put)
           - `customsDeclaration` — [customs declaration number](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1marketplace~1v3~1orders~1%7BorderId%7D~1meta~1customs-declaration/put)
 
@@ -945,7 +944,7 @@ paths:
           - `imei` — [IMEI](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1imei/put)
           - `uin` — [UIN](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1uin/put)
           - `gtin` — [GTIN](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1gtin/put)
-          - `sgtin` — [Data matrix code](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1sgtin/put)
+          - `sgtin` — [labeling code Chestny ZNAK](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1sgtin/put)
           - `customsDeclaration` — [customs declaration number](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1marketplace~1v3~1orders~1%7BorderId%7D~1meta~1customs-declaration/put)
 
         <div class="description_limit">
@@ -1005,13 +1004,13 @@ paths:
         - HeaderApiKey: []
       tags:
         - FBS Metadata
-      summary: Add Data Matrix Code to the Assembly Order
+      summary: Add Labeling Code Chestny ZNAK to the Assembly Order
       description: |
-        The method allows attaching a Data Matrix code [Chestny ZNAK](https://chestnyznak.ru/en) to an assembly order.
+        The method assigns a [labeling code Chestny ZNAK](https://chestnyznak.ru/en) to an assembly order.
 
-        Attaching a Data Matrix code to an assembly order is only possible if this field is returned in the response of the method [to get the metadata of the order](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1marketplace~1v3~1orders~1meta/post), and the assembly order is in the confirm status.
+        You can assign a labeling code to an assembly order if this field is returned in the response of the [Assembly Order Metadata](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1marketplace~1v3~1orders~1meta/post) method, and the assembly order is in the `confirm` status.
 
-        The loaded Data Matrix code can be retrieved through the method [to get the metadata of the order](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1marketplace~1v3~1orders~1meta/post)
+        You can get the loaded labeling code with the [Assembly Order Metadata](/openapi/orders-fbs#tag/FBS-Metadata/paths/~1api~1marketplace~1v3~1orders~1meta/post) method.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding FBS metadata</strong>:
@@ -1032,12 +1031,12 @@ paths:
               properties:
                 sgtins:
                   type: array
-                  description: List of Data Matrix codes.
+                  description: List of labeling codes
                   minItems: 1
                   maxItems: 100
                   items:
                     type: string
-                    description: Label code on the package. From 16 to 135 characters.
+                    description: Labeling code [Chestny ZNAK](https://chestnyznak.ru/en) on the package. From 16 to 135 characters
                     example: '1234567890123456'
       responses:
         '204':
@@ -1064,7 +1063,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '409':
-          description: Error adding a Data Matrix code
+          description: Error adding a labeling code
           content:
             application/json:
               schema:
@@ -1460,7 +1459,7 @@ paths:
         - FBS Assembly Orders
       summary: Get Stickers for Cross-Border Assembly Orders
       description: |
-        Returns a list of stickers for cross-border assembly orders in PDF.<br><br>
+        Returns a list of stickers for Cross-Border assembly orders in PDF.<br><br>
 
         For each assembly order, the response contains the sticker generation status:
           - `awaitingTrackNumber` — the sticker is not ready. Waiting for a carrier's track number.
@@ -1600,7 +1599,7 @@ paths:
         - FBS Assembly Orders
       summary: Status History for Cross-Border Orders
       description: |
-        Returns status history for cross-border orders
+        Returns status history for Cross-Border orders
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
@@ -1736,7 +1735,7 @@ paths:
       tags:
         - FBS Assembly Orders
       description: |
-        The method allows getting information about the client by assembly order ID. <br>Only for cross-border orders from **Turkey**
+        The method allows getting information about the client by assembly order ID. <br>Only for Cross-Border orders from **Turkey**
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
@@ -2174,7 +2173,12 @@ paths:
 
         If the supply wasn't handed over for delivery, than scanning its QR code or accepting the first product will automatically close the supply.
 
-        You can transfer the supply to delivery only if it contains at least one assembly order.
+        You can transfer the supply to delivery only if:
+          - there is at least one assembly order
+          - required labeling is specified for all assembly orders
+          - labeling of all assembly orders passed validation
+
+        If the supply contains assembly orders with required UIN, make sure that you have created and uploaded the Delivery Contract Specification in advance. The [GIIS DMDK](https://minfin.gov.ru/ru/perfomance/jewels/dmdk) takes about 30 minutes to process changes in UIN statuses.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
@@ -2317,9 +2321,9 @@ paths:
         - HeaderApiKey: []
       tags:
         - FBS Supplies
-      summary: Get Supply Boxes List
+      summary: Get Supply Shipping Units List
       description: |
-        Returns supply boxes list.
+        Returns supply shipping units list.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
@@ -2370,13 +2374,13 @@ paths:
         - HeaderApiKey: []
       tags:
         - FBS Supplies
-      summary: Add Boxes to the Supply
+      summary: Add Shipping Units to the Supply
       description: |
-        Adds the required number of boxes to the supply.
+        Adds the required number of shipping units to the supply.
         <br>
         <br>
-        You should add boxes only to supplies shipped to the pickup points.
-        You can add boxes to an open supply only. You can add as many boxes as there are items in the supply, plus one more box.
+        You should add shipping units only to supplies shipped to the pickup points.
+        You can add shipping units to an open supply only. You can add as many shipping units as there are items in the supply, plus one more shipping unit.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
@@ -2401,7 +2405,7 @@ paths:
                   type: integer
                   minimum: 1
                   maximum: 1000
-                  description: Boxes amount to add to the supply.
+                  description: Shipping units amount to add to the supply
                   example: 4
       responses:
         '201':
@@ -2413,7 +2417,7 @@ paths:
                 properties:
                   trbxIds:
                     type: array
-                    description: List of IDs of created boxes.
+                    description: List of IDs of created shipping units
                     minItems: 1
                     items:
                       type: string
@@ -2444,9 +2448,9 @@ paths:
         - HeaderApiKey: []
       tags:
         - FBS Supplies
-      summary: Delete Boxes from the Supply
+      summary: Delete Shipping Units from the Supply
       description: |
-        The method deletes boxes from the supply. Available only while the supply is being assembled.
+        The method deletes shipping units from the supply. Available only while the supply is being assembled.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
@@ -2469,7 +2473,7 @@ paths:
               properties:
                 trbxIds:
                   type: array
-                  description: List of box IDs to delete from the supply.
+                  description: List of shipping unit IDs to delete from the supply
                   items:
                     type: string
                     example: WB-TRBX-1234567
@@ -2505,10 +2509,10 @@ paths:
         - HeaderApiKey: []
       tags:
         - FBS Supplies
-      summary: Get the Supply Box QR Code Stickers
+      summary: Get the Supply Shipping Unit QR Code Stickers
       description: |
         Returns QR-code stickers in svg, zplv (vertical), zplh (horizontal), png.<br>
-        Available only if there are assembly orders in the box.<br>
+        Available only if there are assembly orders in the shipping unit.<br>
         Stickers dimensions: 580x400 px.
 
         <div class="description_limit">
@@ -2543,7 +2547,7 @@ paths:
               properties:
                 trbxIds:
                   type: array
-                  description: List of supply box IDs for the sticker generation
+                  description: List of supply shipping unit IDs for the sticker generation
                   items:
                     type: string
                     example: WB-TRBX-1234567
@@ -2580,6 +2584,93 @@ paths:
           $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/429'
+  /api/marketplace/v3/fbs/orders/archive:
+    servers:
+      - url: https://marketplace-api.wildberries.ru
+    get:
+      tags:
+        - FBS Assembly Orders
+      summary: Get the List of Archived Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+      description: |
+        The method returns assembly orders created more than 3 months ago.<br>
+        Some assembly orders are archived later than 3 months after creation, as the supply is archived only after all orders in it are completed.
+        For example, this happens if the seller did not deliver one of the orders in the supply and the order was canceled automatically after a few days.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      parameters:
+        - name: year
+          in: query
+          description: Year the order was created
+          example: 2023
+          required: true
+          schema:
+            type: integer
+        - name: month
+          in: query
+          description: Month the order was created
+          example: 2
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+        - name: next
+          in: query
+          description: Pagination parameter. Sets the value from which to retrieve the next batch. It should start at 0 to get the full list of data. For the subsequent requests, you must take the value from the `next` field in the response.
+          required: true
+          example: 0
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          description: Number of assembly orders in the response
+          required: true
+          example: 150
+          schema:
+            type: integer
+            format: int32
+            minimum: 100
+            maximum: 1000
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v3.ArchiveOrders'
+        '400':
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/v3.APIErrorV2'
+              examples:
+                BadRequest:
+                  $ref: '#/components/examples/APIError400V2'
+        '401':
+          $ref: '#/components/responses/401-2'
+        '403':
+          description: Access denied
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/v3.APIErrorV2'
+              examples:
+                AccessDenied:
+                  $ref: '#/components/examples/APIError403V2'
+        '429':
+          $ref: '#/components/responses/429-2'
 components:
   securitySchemes:
     HeaderApiKey:
@@ -2682,6 +2773,30 @@ components:
     StatusChangeNotAllowed:
       value:
         message: Status change to 'completed' or 'canceled by client' is not allowed for the assembly order in 'Delivery By Supplier'.
+    APIError400V2:
+      value:
+        code: BadRequest
+        detail: Incorrect parameter
+        errors:
+          - location: query.next
+            message: expected integer
+            value: 1w
+        origin: marketplace-public-api
+        requestId: a0b5907c-2978-4db6-9a59-00666e8b8d54
+        status: 400
+        title: IncorrectParameter
+    APIError403V2:
+      value:
+        code: AccessDenied
+        detail: ''
+        errors:
+          - location: ''
+            message: ''
+            value: 0
+        origin: marketplace-public-api
+        requestId: a0b5907c-2978-4db6-9a59-00666e8b8d54
+        status: 403
+        title: AccessDenied
   responses:
     '401':
       description: Unauthorized
@@ -2736,10 +2851,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:
@@ -2797,7 +2912,294 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             message: Access denied
+    401-2:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Error title
+              detail:
+                type: string
+                description: Error details
+              code:
+                type: string
+                description: Internal error code
+              requestId:
+                type: string
+                description: Unique request ID
+              origin:
+                type: string
+                description: WB internal service ID
+              status:
+                type: number
+                description: HTTP status code
+              statusText:
+                type: string
+                description: Text of the HTTP status code
+              timestamp:
+                type: string
+                format: date-time
+                description: Request date and time
+          example:
+            title: unauthorized
+            detail: 'token problem; token is malformed: could not base64 decode signature: illegal base64 data at input byte 84'
+            code: 07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75
+            requestId: 7b80742415072fe8b6b7f7761f1d1211
+            origin: s2s-api-auth-catalog
+            status: 401
+            statusText: Unauthorized
+            timestamp: '2024-09-30T06:52:38Z'
+    429-2:
+      description: Too many requests
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Error title
+              detail:
+                type: string
+                description: Error details
+              code:
+                type: string
+                description: Internal error code
+              requestId:
+                type: string
+                description: Unique request ID
+              origin:
+                type: string
+                description: WB internal service ID
+              status:
+                type: number
+                description: HTTP status code
+              statusText:
+                type: string
+                description: Text of the HTTP status code
+              timestamp:
+                type: string
+                format: date-time
+                description: Request date and time
+          example:
+            title: too many requests
+            detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+            code: 07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]
+            requestId: 9d3c02cc698f8b041c661a7c28bed293
+            origin: s2s-api-auth-catalog
+            status: 429
+            statusText: Too Many Requests
+            timestamp: '2024-09-30T06:52:38Z'
   schemas:
+    v3.ArchiveOrders:
+      type: object
+      description: List of archived assembly orders
+      required:
+        - orders
+        - next
+      properties:
+        next:
+          description: Pagination parameter. Sets the value from which to get the next batch
+          type: integer
+          format: int64
+          nullable: true
+        orders:
+          description: Archived assembly orders
+          type: array
+          items:
+            $ref: '#/components/schemas/v3.ArchiveOrder'
+    v3.ArchiveOrder:
+      type: object
+      description: Archived assembly order
+      required:
+        - cargoType
+        - colorCode
+        - createdAt
+        - crossBorder
+        - crossBorderType
+        - id
+        - isZeroOrder
+        - metaDetails
+        - options
+        - orderUid
+        - priceInfo
+        - product
+        - rid
+        - scanPrice
+        - status
+        - stickerId
+        - supplyId
+        - warehouseId
+      properties:
+        cargoType:
+          description: |
+            Type of cargo:
+              - `mgt` — small-sized goods
+              - `sgt` — over dimensional cargo (ODC)
+              - `kgtPlus` — dimensional cargo+ (CD+)
+          type: string
+          example: mgt
+        colorCode:
+          description: Color code for tinted products
+          type: string
+          example: RAL 3017
+          nullable: true
+        createdAt:
+          description: Date when the order was created
+          type: string
+          example: '2022-05-04'
+        crossBorder:
+          description: Cross-border order information
+          type: object
+          nullable: true
+          properties:
+            parcel:
+              description: Parcel ID
+              type: string
+              example: 1Z999AA10123456784
+        crossBorderType:
+          description: |
+            Assembly order type:
+              - `local` — Non-Cross-Border
+              - `crossBorder` — Cross-Border
+          type: string
+          example: crossBorder
+        id:
+          description: Assembly order ID
+          type: integer
+          example: 1234567890
+        isZeroOrder:
+          description: |
+            Indicator of an order for an item with zero inventory:
+              - `false` — the order is made for an item with a non-zero inventory
+              - `true` — the order is made for an item with zero inventory
+          type: boolean
+          example: false
+        metaDetails:
+          description: Assembly order metadata
+          $ref: '#/components/schemas/MetaDetails'
+          type: array
+        options:
+          description: Order options
+          type: object
+          properties:
+            isB2B:
+              description: |
+                Indicator of a B2B sale:
+                  - `false` — not B2B sale
+                  - `true` — B2B sale
+              type: boolean
+              example: false
+        orderUid:
+          description: Transaction ID for order grouping. Orders in the same buyer's cart will have the same `orderUid`
+          type: string
+          example: 165918930_629fbc924b984618a44354475ca58675
+        priceInfo:
+          description: Order price data
+          type: object
+          required:
+            - convertedCurrencyCode
+            - convertedPrice
+            - currencyCode
+            - price
+          properties:
+            convertedCurrencyCode:
+              description: Currency code of the supplier country
+              type: integer
+              example: 643
+            convertedPrice:
+              description: The sum charged to the buyer in the currency of the seller's country including all discounts, multiplied by 100
+              type: integer
+              example: 1020
+            currencyCode:
+              description: Sale currency code
+              type: integer
+              example: 643
+            price:
+              description: The price in the currency of sale including all discounts, except WB Wallet discount, multiplied by 100
+              type: integer
+              example: 1020
+        product:
+          description: Item information
+          type: object
+          required:
+            - article
+            - chrtId
+            - nmId
+            - skus
+          properties:
+            article:
+              description: Seller's article
+              type: string
+              example: wv1702fyjh
+            chrtId:
+              description: Item size ID in WB systems
+              type: integer
+              example: 12345678
+            nmId:
+              description: WB article
+              type: integer
+              example: 370870300
+            skus:
+              description: List of SKUs
+              items:
+                type: string
+              type: array
+              example:
+                - 12345Ejf5
+                - 12345Ejf6
+                - 12345Ejf7
+        rid:
+          description: |
+            Unique order ID. <br>
+            Note: `rid` corresponds to `srid` in the responses of the methods:
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
+              - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
+              - [Goods Return Report](./reports#tag/Goods-Return-Report)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
+          type: string
+          example: f884001e44e511edb8780242ac120002
+        scanPrice:
+          description: Acceptance price in kopecks
+          type: integer
+          nullable: true
+          example: 5200
+        status:
+          description: The latest assembly order statuses
+          required:
+            - supplierStatus
+            - wbStatus
+          properties:
+            supplierStatus:
+              description: Assembly order status set by the seller
+              example: complete
+              type: string
+            wbStatus:
+              description: Assembly order status set by WB system
+              example: sent_to_carrier
+              type: string
+          type: object
+        stickerId:
+          description: Sticker ID
+          example: 33811984302
+          type: integer
+        supplyId:
+          description: Supply ID
+          example: WB-GI-1234588
+          type: string
+          nullable: true
+        warehouseId:
+          description: ID of the seller warehouse from which the product was shipped
+          example: 55684681
+          type: integer
     v3.SupplyOrderIDsAPI:
       type: object
       properties:
@@ -2847,6 +3249,43 @@ components:
           type: object
           description: Additional data for the error
           nullable: true
+    v3.APIErrorV2:
+      required:
+        - title
+        - detail
+      properties:
+        code:
+          description: Error code
+          type: string
+        detail:
+          description: Error details
+          type: string
+        errors:
+          items:
+            properties:
+              location:
+                description: Parameter where the error occurred
+                type: string
+              message:
+                description: Error text
+                type: string
+              value:
+                description: Value of the parameter where the error occurred
+            type: object
+          type: array
+        origin:
+          description: WB internal service ID
+          type: string
+        requestId:
+          description: Unique request ID
+          type: string
+        status:
+          description: HTTP status code
+          type: integer
+        title:
+          description: Error title
+          type: string
+      type: object
     409SupplyDeliverError:
       type: object
       nullable: false
@@ -2889,20 +3328,25 @@ components:
                           type: string
                           description: |
                             State:
-                            - IMEI
+                            - `imei`
                               - `pending` — Metadata for inspection
                               - `required` — Required metadata is not filled
                               - `imeiInvalidFormat` — Invalid format
                               - `imeiAlreadySold` — The item with this IMEI has already been sold
-                            - UIN
+                            - `uin`
                               - `required` — Required metadata is not filled
                               - `pending` — Metadata for inspection
                               - `uinInvalidFormat` — Invalid format
-                              - `uinNotFound` — Not found
                               - `uinBadStatus` — Invalid batch status
                               - `uinBadProcess` — Invalid processing stage
                               - `uinBadStatusAndBadProcess` — Invalid batch status. Invalid processing stage
-                            - SGTIN
+                              - `uinNotFound` — Not found in GIIS DMDK [https://minfin.gov.ru/ru/perfomance/jewels/dmdk].
+                                When you receive this error, make sure that the UIN:
+                                - is specified in the uploaded Delivery Contract Specification. If the specification was uploaded more than 30 minutes ago, [delete UIN](./orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta/delete) from the assembly order and [add it](./orders-fbs#tag/FBS-Metadata/paths/~1api~1v3~1orders~1%7BorderId%7D~1meta~1uin/put) again
+                                - is registered in GIIS DMDK
+                                - is specified correctly and is read from the tag without errors
+                                - is in circulation
+                            - `sgtin`
                               - `pending` — Metadata for inspection
                               - `required` — Required metadata is not filled
                               - `sgtinInvalidFormat` — Invalid format
@@ -2915,17 +3359,17 @@ components:
                               - `sgtinDisaggregation` — Disaggregation
                               - `sgtinDisaggregated` — Disaggregated
                               - `sgtinAppliedNotPaid` — Not paid
-                            - GTIN
+                            - `gtin`
                               - `required` — Required metadata is not filled
-                            - Expiration
+                            - `expiration`
                               - `required` — Required metadata is not filled
-                            - Customs declaration
+                            - `customsDeclaration`
                               - `required` — Required metadata is not filled
     Next:
       type: integer
       format: int64
       nullable: false
-      description: Pagination parameter. Sets the value from which to retrieve the next batch
+      description: Pagination parameter. Sets the value from which to get the next batch
       example: 13833711
     Order:
       type: object
@@ -2989,11 +3433,14 @@ components:
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: f884001e44e511edb8780242ac120002
         createdAt:
           type: string
@@ -3080,8 +3527,8 @@ components:
         crossBorderType:
           description: |
             Assembly order type:
-              - `0` — non-cross-border
-              - `1` — cross-border
+              - `0` — Non-Cross-Border
+              - `1` — Cross-Border
           enum:
             - 0
             - 1
@@ -3174,8 +3621,8 @@ components:
         crossBorderType:
           description: |
             Supply type:
-              - `0` — non-cross-border
-              - `1` — cross-border
+              - `0` — Non-Cross-Border
+              - `1` — Cross-Border
               - `null` — no value
           enum:
             - 0
@@ -3190,6 +3637,14 @@ components:
           nullable: true
           description: ID of the destination office for the supply. If `null`, destination office ID is not specified
           example: 123
+        recommendedWhId:
+          type: integer
+          format: int64
+          description: |
+            ID of the recommended warehouse for acceptance of the supply for Moscow and Moscow region. <br>
+            The warehouse closest to the customers chain is defined automatically when the supply is transferred to delivery, taking into account the parameters of all assembly orders in the supply.<br>
+            If `0`, the recommended warehouse is not determined
+          example: 123569
     OrderNew:
       type: object
       properties:
@@ -3293,11 +3748,14 @@ components:
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: f884001e44e511edb8780242ac120002
         createdAt:
           type: string
@@ -3392,8 +3850,8 @@ components:
         crossBorderType:
           description: |
             Assembly order type:
-              - `0` — non-cross-border
-              - `1` — cross-border
+              - `0` — Non-Cross-Border
+              - `1` — Cross-Border
           enum:
             - 0
             - 1
@@ -3422,7 +3880,7 @@ components:
       type: object
       properties:
         id:
-          description: Box ID
+          description: Shipping unit ID
           type: string
           example: WB-TRBX-1234567
     TrbxStickers:
@@ -3477,7 +3935,7 @@ components:
               example:
                 - '123456789012345'
               nullable: true
-          description: Data Matrix code (Chestny ZNAK)
+          description: Labeling code [Chestny ZNAK](https://chestnyznak.ru/en)
         expiration:
           type: object
           properties:
@@ -3515,7 +3973,7 @@ components:
             example: uinMaySell
             description: |
               State:
-              - IMEI
+              - `imei`
                 - `pending` — Metadata for inspection
                 - `filled` — Validation passed
                 - `deadlineExceeded` — Validation passed
@@ -3523,18 +3981,23 @@ components:
                 - `required` — Required metadata is not filled. Validation failed
                 - `imeiInvalidFormat` — Invalid format. Validation failed
                 - `imeiAlreadySold` — The item with this IMEI has already been sold. Validation failed
-              - UIN
+              - `uin`
                 - `pending` — Metadata for inspection
                 - `filled` — Validation passed
                 - `deadlineExceeded` — Validation passed
                 - `optional` — Metadata is not required. Validation passed
                 - `required` — Required metadata is not filled. Validation failed
                 - `uinInvalidFormat` — Invalid format. Validation failed
-                - `uinNotFound` — Not found. Validation failed
                 - `uinBadStatus` — Invalid batch status. Validation failed
                 - `uinBadProcess` — Invalid processing stage. Validation failed
                 - `uinBadStatusAndBadProcess` — Invalid batch status. Invalid processing stage. Validation failed
-              - SGTIN
+                - `uinNotFound` — Not found in GIIS DMDK. Validation failed.
+                  The status may mean that the UIN:
+                    - is not specified in the uploaded Delivery Contract Specification
+                    - is not registered in GIIS DMDK
+                    - is specified incorrectly and is read from the tag with errors
+                    - is not in circulation
+              - `sgtin`
                 - `pending` — Metadata for inspection
                 - `filled` — Validation passed
                 - `deadlineExceeded` — Validation passed
@@ -3550,15 +4013,15 @@ components:
                 - `sgtinDisaggregation` — Disaggregation. Validation failed
                 - `sgtinDisaggregated` — Disaggregated. Validation failed
                 - `sgtinAppliedNotPaid` — Not paid. Validation failed
-              - GTIN
+              - `gtin`
                 - `filled` — Validation passed
                 - `optional` — Metadata is not required. Validation passed
                 - `required` — Required metadata is not filled. Validation failed
-              - Expiration
+              - `expiration`
                 - `filled` — Validation passed
                 - `optional` — Metadata is not required. Validation passed
                 - `required` — Required metadata is not filled. Validation failed
-              - Customs declaration
+              - `customsDeclaration`
                 - `filled` — Validation passed
                 - `required` — Required metadata is not filled. Validation failed
     v3.GetMetaMultiRequest:
@@ -3681,7 +4144,7 @@ components:
     CrossborderTurkeyClientInfoResp:
       properties:
         orders:
-          description: Client information for cross-border orders from Turkey
+          description: Client information for Cross-Border orders from Turkey
           items:
             $ref: '#/components/schemas/CrossborderTurkeyClientInfo'
           type: array
