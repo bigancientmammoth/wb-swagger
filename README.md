@@ -33,7 +33,7 @@ Original specs sourced from:
 | scope           | uri                                                                                                                                 |
 |-----------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | general         | https://bigancientmammoth.github.io/wb-swagger/original/en/01-general.yaml                                                          |
-| produts         | https://bigancientmammoth.github.io/wb-swagger/original/en/02-products.yaml                                                         |
+| products        | https://bigancientmammoth.github.io/wb-swagger/original/en/02-products.yaml                                                         |
 | orders-fbs      | https://bigancientmammoth.github.io/wb-swagger/original/en/03-orders-fbs.yaml                                                       |
 | orders-dbw      | https://bigancientmammoth.github.io/wb-swagger/original/en/04-orders-dbw.yaml                                                       |
 | orders-dbs      | https://bigancientmammoth.github.io/wb-swagger/original/en/05-orders-dbs.yaml                                                       |
