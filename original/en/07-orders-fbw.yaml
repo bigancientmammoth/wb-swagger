@@ -32,9 +32,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 6 requests | 10 s | 6 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 6 requests | 10 s | 6 requests |
+        | Service | 1 min | 6 requests | 10 s | 6 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: warehouseID
@@ -101,9 +104,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 6 requests | 10 s | 6 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 6 requests | 10 s | 6 requests |
+        | Service | 1 min | 6 requests | 10 s | 6 requests |
+        | Base | 12 h | 1 request | 12 h | 1 request |
         </div>
       responses:
         '200':
@@ -137,9 +143,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 6 requests | 10 s | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 6 requests | 10 s | 10 requests |
+        | Service | 1 min | 6 requests | 10 s | 10 requests |
+        | Base | 12 h | 1 request | 12 h | 1 request |
         </div>
       responses:
         '200':
@@ -172,9 +181,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 30 requests | 2 s | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 30 requests | 2 s | 10 requests |
+        | Service | 1 min | 30 requests | 2 s | 10 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: limit
@@ -281,9 +293,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 30 requests | 2 s | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 30 requests | 2 s | 10 requests |
+        | Service | 1 min | 30 requests | 2 s | 10 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: ID
@@ -353,9 +368,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 30 requests | 2 s | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 30 requests | 2 s | 10 requests |
+        | Service | 1 min | 30 requests | 2 s | 10 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: limit
@@ -399,7 +417,7 @@ paths:
         '400':
           description: Bad request
           content:
-            application/json:
+            text/plain; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/models.ErrorModel'
               examples:
@@ -436,9 +454,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 30 requests | 2 s | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 30 requests | 2 s | 10 requests |
+        | Service | 1 min | 30 requests | 2 s | 10 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: ID
@@ -579,7 +600,7 @@ components:
           description: WB article
         needKiz:
           description: |
-            Is a [data matrix code](https://честныйзнак.рф/) required for this product:
+            Is a labeling code [Chestny ZNAK](https://chestnyznak.ru/en) required for this product:
               - `false` — not required
               - `true` — required
           type: boolean
@@ -1225,10 +1246,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:

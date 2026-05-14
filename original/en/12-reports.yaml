@@ -38,7 +38,7 @@ paths:
         - HeaderApiKey: []
       summary: Warehouse
       deprecated: true
-      description: "This method is deprecated. It will be removed on\_[June 23](https://dev.wildberries.ru/en/release-notes?id=494)\n\n<div class=\"description_limit\">\n  <a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a> per one seller's account:\n\n  | Period | Limit | Interval | Burst |\n  | --- | --- | --- | --- |\n  | 1 minute | 1 request | 1 minute | 1 request |\n</div>\n"
+      description: "This method is deprecated. It will be removed on\_[June 23](https://dev.wildberries.ru/en/release-notes?id=494)\n\n<div class=\"description_limit\">\n<a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a> per one seller's account:\n\n| Period | Limit | Interval | Burst |\n| --- | --- | --- | --- |\n| 1 min | 1 request | 1 min | 10 requests |\n</div>\n"
       tags:
         - Main Reports
       parameters:
@@ -132,11 +132,11 @@ paths:
         For a single response to a request with `flag=0` or without `flag`, a conditional limit of 80,000 rows is set. Therefore, more than one request may be necessary to retrieve all orders. In the second and subsequent requests, use the full value of the `lastChangeDate` field of the last row from the response of the previous request in the `dateFrom` parameter.<br> If the response returns an empty array `[]`, all orders have already been retrieved.
 
         <div class="description_limit">
-          <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-          | Period | Limit | Interval | Burst |
-          | --- | --- | --- | --- |
-          | 1 minute | 1 request | 1 minute | 1 request |
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 1 request | 1 min | 10 requests |
         </div>
       tags:
         - Main Reports
@@ -244,11 +244,11 @@ paths:
         For a single response to a request with `flag=0` or without `flag`, a conditional limit of 80,000 rows is set. Therefore, more than one request may be necessary to retrieve all sales and returns. In the second and subsequent requests, use the full value of the `lastChangeDate` field of the last row from the response of the previous request in the `dateFrom` parameter.<br> If the response returns an empty array `[]`, all sales and returns have already been retrieved.
 
         <div class="description_limit">
-          <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-          | Period | Limit | Interval | Burst |
-          | --- | --- | --- | --- |
-          | 1 minute | 1 request | 1 minute | 1 request |
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 1 request | 1 min | 1 request |
         </div>
       tags:
         - Main Reports
@@ -342,9 +342,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 5 h | 10 requests | 30 min | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 5 h | 10 requests | 30 min | 10 requests |
+        | Service | 5 h | 10 requests | 30 min | 10 requests |
+        | Base | 24 h | 2 requests | 12 h | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/DateFrom'
@@ -396,9 +399,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 5 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 5 requests |
+        | Service | 1 min | 1 request | 1 min | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - in: query
@@ -520,9 +526,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 5 s | 1 request | 5 s | 5 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 5 s | 1 request | 5 s | 5 requests |
+        | Service | 5 s | 1 request | 5 s | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - name: task_id
@@ -586,9 +595,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 1 request |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 1 request |
+        | Service | 1 min | 1 request | 1 min | 1 request |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - name: task_id
@@ -877,9 +889,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 1 request |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 1 request |
+        | Service | 1 min | 1 request | 1 min | 1 request |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - name: dateFrom
@@ -1112,9 +1127,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 5 s | 1 request | 5 s | 1 request |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 5 s | 1 request | 5 s | 1 request |
+        | Service | 5 s | 1 request | 5 s | 1 request |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: task_id
@@ -1178,9 +1196,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 1 request |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 1 request |
+        | Service | 1 min | 1 request | 1 min | 1 request |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: task_id
@@ -1352,9 +1373,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 5 s | 1 request | 5 s | 5 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 5 s | 1 request | 5 s | 5 requests |
+        | Service | 5 s | 1 request | 5 s | 5 requests |
+        | Base | 1 h | 2 requests | 30 min | 2 requests |
         </div>
       parameters:
         - name: task_id
@@ -1418,9 +1442,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 1 request |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 1 request |
+        | Service | 1 min | 1 request | 1 min | 1 request |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: task_id
@@ -1991,9 +2018,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 10 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 10 requests |
+        | Service | 1 min | 1 request | 1 min | 10 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       parameters:
         - name: dateFrom
@@ -3194,10 +3224,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:
@@ -3455,9 +3485,9 @@ components:
                 incomeId: 18484008
                 nmID: 49434732
                 photoUrls:
-                  - https://static-basket-03.{{ .baseDomain }}/vol54/photo-fixation-violation-shk-excise/12345678900-1811460999-1.jpg
-                  - https://static-basket-03.{{ .baseDomain }}/vol54/photo-fixation-violation-shk-excise/12345678900-1811461000-2.jpg
-                  - https://static-basket-03.{{ .baseDomain }}/vol54/photo-fixation-violation-shk-excise/12345678900-1811461001-3.jpg
+                  - https://static-basket-03.wildberries.ru/vol54/photo-fixation-violation-shk-excise/12345678900-1811460999-1.jpg
+                  - https://static-basket-03.wildberries.ru/vol54/photo-fixation-violation-shk-excise/12345678900-1811461000-2.jpg
+                  - https://static-basket-03.wildberries.ru/vol54/photo-fixation-violation-shk-excise/12345678900-1811461001-3.jpg
                 shkID: 17346434621
                 sku: '4630153500834'
     SuccessBrandsResponse:

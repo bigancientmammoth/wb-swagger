@@ -436,6 +436,19 @@ paths:
       deprecated: true
       description: |
         Данный метод устарел. Он будет удалён [19 мая](https://dev.wildberries.ru/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для методов <strong>сборочных заданий Самовывоз</strong>:
+
+
+        | Тип | Период | Лимит | Интервал | Всплеск |
+        | --- | --- | --- | --- | --- |
+        | Персональный | 1 мин | 100 запросов | 600 мс | 20 запросов |
+        | Сервисный | 1 мин | 100 запросов | 600 мс | 20 запросов |
+        | Базовый | 1 ч | 10 запросов | 6 мин | 1 запрос |
+
+        Один запрос с кодом ответа <code>409</code> учитывается как 10 запросов
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -484,6 +497,19 @@ paths:
       deprecated: true
       description: |
         Данный метод устарел. Он будет удалён [19 мая](https://dev.wildberries.ru/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для методов <strong>сборочных заданий Самовывоз</strong>:
+
+
+        | Тип | Период | Лимит | Интервал | Всплеск |
+        | --- | --- | --- | --- | --- |
+        | Персональный | 1 мин | 100 запросов | 600 мс | 20 запросов |
+        | Сервисный | 1 мин | 100 запросов | 600 мс | 20 запросов |
+        | Базовый | 1 ч | 50 запросов | 72 сек | 1 запрос |
+
+        Один запрос с кодом ответа <code>409</code> учитывается как 10 запросов
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -718,6 +744,19 @@ paths:
       deprecated: true
       description: |
         Данный метод устарел. Он будет удалён [19 мая](https://dev.wildberries.ru/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для методов <strong>сборочных заданий Самовывоз</strong>:
+
+
+        | Тип | Период | Лимит | Интервал | Всплеск |
+        | --- | --- | --- | --- | --- |
+        | Персональный | 1 мин | 100 запросов | 600 мс | 20 запросов |
+        | Сервисный | 1 мин | 100 запросов | 600 мс | 20 запросов |
+        | Базовый | 1 ч | 10 запросов | 6 мин | 1 запрос |
+
+        Один запрос с кодом ответа <code>409</code> учитывается как 10 запросов
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -845,10 +884,10 @@ paths:
       x-category: marketplace
       tags:
         - Метаданные Самовывоз
-      summary: Закрепить коды маркировки товара за сборочными заданиями
+      summary: Закрепить коды маркировки Честного знака за сборочными заданиями
       description: |
-        Метод обновляет код маркировки [Честный знак](https://честныйзнак.рф/) в [метаданных](/openapi/in-store-pickup#tag/Metadannye-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post) нескольких сборочных заданий.<br>
-        Закрепить код маркировки можно, только если в [метаданных сборочного задания](/openapi/in-store-pickup#tag/Metadannye-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post) есть поле `sgtin`, а сборочное задание находится в [статусе](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `confirm`.
+        Метод обновляет код маркировки [Честного знака](https://честныйзнак.рф/) в [метаданных](/openapi/in-store-pickup#tag/Metadannye-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post) нескольких сборочных заданий.<br>
+        Закрепить код маркировки Честного знака можно, только если в [метаданных сборочного задания](/openapi/in-store-pickup#tag/Metadannye-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post) есть поле `sgtin`, а сборочное задание находится в [статусе](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `confirm`.
         <br><br>
         Получить загруженные маркировки можно в [метаданных сборочного задания](/openapi/in-store-pickup#tag/Metadannye-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post).
 
@@ -1019,6 +1058,19 @@ paths:
       deprecated: true
       description: |
         Данный метод устарел. Он будет удалён [19 мая](https://dev.wildberries.ru/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>закрепления метаданных Самовывоз</strong>:
+
+
+        | Тип | Период | Лимит | Интервал | Всплеск |
+        | --- | --- | --- | --- | --- |
+        | Персональный | 1 мин | 300 запросов | 200 мс | 20 запросов |
+        | Сервисный | 1 мин | 300 запросов | 200 мс | 20 запросов |
+        | Базовый | 1 ч | 10 запросов | 6 мин | 1 запрос |
+
+        Один запрос с кодом ответа <code>409</code> учитывается как 10 запросов
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -1148,6 +1200,19 @@ paths:
       deprecated: true
       description: |
         Данный метод устарел. Он будет удалён [19 мая](https://dev.wildberries.ru/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>закрепления метаданных Самовывоз</strong>:
+
+
+        | Тип | Период | Лимит | Интервал | Всплеск |
+        | --- | --- | --- | --- | --- |
+        | Персональный | 1 мин | 1000 запросов | 60 мс | 20 запросов |
+        | Сервисный | 1 мин | 1000 запросов | 60 мс | 20 запросов |
+        | Базовый | 1 ч | 10 запросов | 6 мин | 1 запрос |
+
+        Один запрос с кодом ответа <code>409</code> учитывается как 10 запросов
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -1463,12 +1528,15 @@ components:
           type: string
           description: |
             Уникальный ID заказа. <br>
-            Примечание: поле `rid` — это поле `srid` в ответах методов:
+            Примечание: `rid` — это `srid` в ответах методов:
               - [Заявки покупателей на возврат](./user-communication#tag/Vozvraty-pokupatelyami/paths/~1api~1v1~1claims/get)
               - [Заказы](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1orders/get)
               - [Продажи](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1sales/get)
               - [Отчет о возвратах и перемещении товаров](./reports#tag/Otchyot-o-vozvratah-i-peremeshenii-tovarov)
-              - [Отчет о продажах по реализации](./financial-reports-and-accounting#tag/Finansovye-otchyoty/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Детализации к отчётам реализации по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailedReportId)
+              - [Детализации к отчётам реализации за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailed)
+              - [Детализации к отчётам об издержках на приём платежей по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailedReportId)
+              - [Детализации к отчётам об издержках на приём платежей за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailed)
         createdAt:
           type: string
           description: Дата и время создания сборочного задания
@@ -1651,12 +1719,15 @@ components:
           type: string
           description: |
             Уникальный ID заказа. <br>
-            Примечание: поле `rid` — это поле `srid` в ответах методов:
+            Примечание: `rid` — это `srid` в ответах методов:
               - [Заявки покупателей на возврат](./user-communication#tag/Vozvraty-pokupatelyami/paths/~1api~1v1~1claims/get)
               - [Заказы](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1orders/get)
               - [Продажи](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1sales/get)
               - [Отчет о возвратах и перемещении товаров](./reports#tag/Otchyot-o-vozvratah-i-peremeshenii-tovarov)
-              - [Отчет о продажах по реализации](./financial-reports-and-accounting#tag/Finansovye-otchyoty/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Детализации к отчётам реализации по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailedReportId)
+              - [Детализации к отчётам реализации за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailed)
+              - [Детализации к отчётам об издержках на приём платежей по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailedReportId)
+              - [Детализации к отчётам об издержках на приём платежей за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailed)
           example: 5044304527347733263.0.0
         skus:
           type: array
@@ -1916,7 +1987,7 @@ components:
               example:
                 - '123456789012345'
               nullable: true
-          description: Код маркировки Честного знака
+          description: Код маркировки [Честного знака](https://честныйзнак.рф/)
         uin:
           type: object
           properties:
@@ -2214,7 +2285,7 @@ components:
         sgtin:
           type: array
           nullable: true
-          description: Код маркировки Честного знака
+          description: Код маркировки [Честного знака](https://честныйзнак.рф/)
           items:
             type: string
             example: '123456789012345'
@@ -2231,8 +2302,13 @@ components:
       properties:
         key:
           type: string
+          enum:
+            - imei
+            - uin
+            - gtin
+            - sgtin
           example: imei
-          description: Тип метаданных для удаления (`imei`, `uin`, `gtin`, `sgtin`). Передаётся только одно значение
+          description: Тип метаданных для удаления. Передаётся только одно значение
         ordersIds:
           type: array
           description: Список ID сборочных заданий
@@ -2296,10 +2372,10 @@ components:
                 description: Заголовок ошибки
               detail:
                 type: string
-                description: Детали ошибки. Ошибка означает, что на балансе сервиса из [Каталога](https://dev.wildberries.ru/business-solutions) недостаточно средств
+                description: Детали ошибки. Ошибка возвращается только сервисам из [Каталога решений для бизнеса](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Слишком много запросов
       content:

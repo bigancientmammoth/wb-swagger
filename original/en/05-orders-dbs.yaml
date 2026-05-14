@@ -451,7 +451,8 @@ paths:
         - DBS Assembly Orders
       summary: Cancel Assembly Orders
       description: |
-        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the [statuses](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) `new`, `confirm` и `deliver` to the status `cancel` — canceled by the supplier.
+        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the `new` and `confirm` [statuses](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) to the `cancel` status  — canceled by the supplier.
+        You can not cancel assembly orders with the `deliver` status.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
@@ -726,7 +727,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/api.StatusSetResponses'
+                $ref: '#/components/schemas/api.StatusSetDeliverResponses'
         '400':
           description: Bad request
           content:
@@ -916,7 +917,7 @@ paths:
                 title: AccessDenied
         '429':
           $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/status:
+  /api/marketplace/v3/dbs/orders/meta/details:
     servers:
       - url: https://marketplace-api.wildberries.ru
     post:
@@ -925,331 +926,64 @@ paths:
       security:
         - HeaderApiKey: []
       tags:
-        - DBS Assembly Orders
-      summary: Get orders statuses
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
+        - DBS Metadata
+      summary: Get Assembly Orders Metadata
+      description: |
+        Returns [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) metadata and their validation statuses.<br>
+        You can get the list of metadata available for the assembly order via the [list of new assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1v3~1dbs~1orders~1new/get) method, field `requiredMeta`.<br>
+        Possible metadata:
+        - `imei` — [IMEI](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1imei/post)
+        - `uin` — [UIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1uin/post)
+        - `gtin` — [GTIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1gtin/post)
+        - `sgtin` — [Data Matrix code](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post)
+        - `customsDeclaration` — [customs declaration number](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1meta~1customs-declaration/post)
+
+        If the response has an empty `meta` structure, the assembly order has no metadata and you can't add it.
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>getting and deleting DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - orders
-              properties:
-                orders:
-                  type: array
-                  minItems: 1
-                  maxItems: 1000
-                  description: Orders IDs list
-                  items:
-                    type: integer
-                    format: int64
-                    example: 5632423
+              $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  orders:
-                    type: array
-                    nullable: false
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          format: int64
-                          nullable: false
-                          description: Assembly order ID
-                          example: 5632423
-                        supplierStatus:
-                          type: string
-                          nullable: false
-                          description: Assembly order status set by the seller
-                          example: new
-                        wbStatus:
-                          type: string
-                          nullable: false
-                          description: Order status in the Wildberries system
+                $ref: '#/components/schemas/api.OrdersMetaDetailsResponse'
         '400':
           description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
+                $ref: '#/components/schemas/api.BatchError'
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
         '401':
           $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
         '403':
-          $ref: '#/components/responses/AccessDenied'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/cancel:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    patch:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Assembly Orders
-      summary: Cancel the Order
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-      responses:
-        '204':
-          description: Canceled
-        '400':
-          description: Bad request
+          description: Access denied
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Status update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                StatusMismatch:
-                  $ref: '#/components/examples/StatusMismatch'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/confirm:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    patch:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Assembly Orders
-      summary: Transfer to Assembly
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/OrderDBS'
-      responses:
-        '204':
-          description: Confirmed
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Status update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                StatusMismatch:
-                  $ref: '#/components/examples/StatusMismatch'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/deliver:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    patch:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Assembly Orders
-      summary: Transfer to Delivery
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/OrderDBS'
-      responses:
-        '204':
-          description: Confirmed
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Status update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                StatusMismatch:
-                  $ref: '#/components/examples/StatusMismatch'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/receive:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    patch:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Assembly Orders
-      summary: Notify That the Order Has Been Accepted by the Buyer
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Code'
-      parameters:
-        - $ref: '#/components/parameters/OrderDBS'
-      responses:
-        '204':
-          description: Confirmed
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Status update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                StatusMismatch:
-                  $ref: '#/components/examples/StatusMismatch'
-                InvalidWBCode:
-                  $ref: '#/components/examples/InvalidWBCode'
-                SGTINIsNotFilled:
-                  $ref: '#/components/examples/SGTINIsNotFilled'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/reject:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    patch:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Assembly Orders
-      summary: Notify That the Buyer Has Declined the Order
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Code'
-      parameters:
-        - $ref: '#/components/parameters/OrderDBS'
-      responses:
-        '204':
-          description: Confirmed
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Status update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                StatusMismatch:
-                  $ref: '#/components/examples/StatusMismatch'
-                InvalidWBCode:
-                  $ref: '#/components/examples/InvalidWBCode'
+                $ref: '#/components/schemas/api.BatchError'
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
         '429':
           $ref: '#/components/responses/429'
   /api/marketplace/v3/dbs/orders/meta/info:
@@ -1263,27 +997,8 @@ paths:
       tags:
         - DBS Metadata
       summary: Get Assembly Orders Metadata
-      description: |
-        Returns assembly orders metadata.<br>
-        You can get the list of metadata available for the assembly order via the [list of new assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1v3~1dbs~1orders~1new/get) method, field `requiredMeta`.<br>
-        Possible metadata:
-        - `imei` — [IMEI](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1imei/post)
-        - `uin` — [UIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1uin/post)
-        - `gtin` — [GTIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1gtin/post)
-        - `sgtin` — [Data Matrix code](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post)
-        - `customsDeclaration` — [customs declaration number](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1meta~1customs-declaration/post)
-
-        If the response has an empty `meta` structure, the assembly order has no metadata and you can't add it.
-
-        <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>getting and deleting DBS metadata</strong>:
-
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 150 requests | 400 ms | 20 requests |
-
-        One request with a response code of <code>409</code> is counted as 10 requests
-        </div>
+      deprecated: true
+      description: "This method is deprecated. It will be removed on\_[July 27](https://dev.wildberries.ru/en/release-notes?id=508)\n\n<div class=\"description_limit\">\n<a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a> per one seller's account for all methods for <strong>getting and deleting DBS metadata</strong>:\n\n| Period | Limit | Interval | Burst |\n| --- | --- | --- | --- |\n| 1 min | 150 requests | 400 ms | 20 requests |\n\nOne request with a response code of <code>409</code> is counted as 10 requests\n</div>\n"
       requestBody:
         content:
           application/json:
@@ -1334,7 +1049,7 @@ paths:
         - DBS Metadata
       summary: Delete Assembly Orders Metadata
       description: |
-        Removes all [assembly order metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post) values.
+        Removes all [assembly order metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1details/post) values.
         <br><br>
         You can only delete one type of metadata in one request.
         Specify the metadata type in the request:
@@ -1409,17 +1124,20 @@ paths:
         - DBS Metadata
       summary: Add Data Matrix Codes to Assembly Orders (Chestny ZNAK)
       description: |
-        Sets the Data Matrix code (Chestny ZNAK marking) for the assembly orders. <br>
-        You can set the Data Matrix code only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order metadata](orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post) method.
+        Sets the labeling code [Chestny ZNAK](https://chestnyznak.ru/en) for the assembly orders. <br>
+        You can set the labeling code Chestny ZNAK only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order metadata](orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1details/post) method.
         <br>
         For more information about Data Matrix Codes please check: https://chestnyznak.ru/en/.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 500 requests | 120 ms | 20 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 500 requests | 120 ms | 20 requests |
+        | Service | 1 min | 500 requests | 120 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
 
         One request with a response code of <code>409</code> is counted as 10 requests
         </div>
@@ -1459,12 +1177,6 @@ paths:
                 origin: dbs-public-api
                 requestId: f1787bd2d1fdс35d6f537316514у4a05
                 title: AccessDenied
-        '409':
-          description: Metadata update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/api.Error'
         '429':
           $ref: '#/components/responses/429'
   /api/marketplace/v3/dbs/orders/meta/uin:
@@ -1479,7 +1191,7 @@ paths:
         - DBS Metadata
       summary: Add UIN (Unique Identification Number) to Assembly Orders
       description: |
-        Sets the UIN to the [assembly orders metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post). <br>
+        Sets the UIN to the [assembly orders metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1details/post). <br>
         The order can only have one UIN.
         You can add the UIN only for assembly orders in the `confirmed` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) and that are delivered by Wildberries.
 
@@ -1548,7 +1260,7 @@ paths:
         - DBS Metadata
       summary: Add IMEI to Assembly Orders
       description: |
-        Sets the IMEI for the [assembly orders metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post). <br>
+        Sets the IMEI for the [assembly orders metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1details/post). <br>
         The assembly order can have only one IMEI.
         You can add the IMEI only for orders in the `confirmed` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) and that are delivered by Wildberries.<br>
 
@@ -1617,7 +1329,7 @@ paths:
         - DBS Metadata
       summary: Add GTIN to Assembly Orders
       description: |
-        Sets the GTIN, Belarus product unique identifier, for the assembly order metadata(./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post). <br>
+        Sets the GTIN, Belarus product unique identifier, for the assembly order metadata(./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1details/post). <br>
         The assembly order can only have one GTIN.
         You can set the GTIN only for orders in the `confirmed` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) and that are delivered by Wildberries.<br>
 
@@ -1758,347 +1470,6 @@ paths:
                   $ref: '#/components/examples/FailedToUpdateMeta'
         '429':
           $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/meta:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    get:
-      x-readonly-method: true
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Metadata
-      summary: Get order metadata
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                nullable: false
-                properties:
-                  meta:
-                    $ref: '#/components/schemas/Meta'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '429':
-          $ref: '#/components/responses/429'
-    delete:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Metadata
-      summary: Delete Order Metadata
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-        - name: key
-          in: query
-          schema:
-            type: string
-          description: Name of metadata to delete (**imei**, **uin**, **gtin**, **sgtin**). Only one value is passed
-      responses:
-        '204':
-          description: Deleted
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '409':
-          description: Metadata delete error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                FailedToUpdateMeta:
-                  $ref: '#/components/examples/FailedToUpdateMeta'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/meta/sgtin:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    put:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Metadata
-      summary: Add Data Matrix Code to the Order
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                sgtins:
-                  type: array
-                  description: List of Data Matrix codes.From 16 to 135 characters for one label.
-                  minItems: 1
-                  maxItems: 24
-                  items:
-                    type: string
-                    description: Label code on the package. From 16 to 135 characters.
-                    example: '1234567890123456'
-      responses:
-        '204':
-          description: Sent
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Error adding label
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                FailedToUpdateMeta:
-                  $ref: '#/components/examples/FailedToUpdateMeta'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/meta/uin:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    put:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Metadata
-      summary: Add UIN (Unique Identification Number) to the Order
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                uin:
-                  type: string
-                  minLength: 16
-                  maxLength: 16
-                  description: UIN
-                  example: '1234567890123456'
-              required:
-                - uin
-      responses:
-        '204':
-          description: Updated
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Metadata update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                FailedToUpdateMeta:
-                  $ref: '#/components/examples/FailedToUpdateMeta'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/meta/imei:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    put:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Metadata
-      summary: Add IMEI to the Order
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                imei:
-                  type: string
-                  minLength: 15
-                  maxLength: 15
-                  description: IMEI
-                  example: '123456789012345'
-              required:
-                - imei
-      responses:
-        '204':
-          description: Updated
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Metadata update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                FailedToUpdateMeta:
-                  $ref: '#/components/examples/FailedToUpdateMeta'
-        '429':
-          $ref: '#/components/responses/429'
-  /api/v3/dbs/orders/{orderId}/meta/gtin:
-    servers:
-      - url: https://marketplace-api.wildberries.ru
-    put:
-      x-readonly-method: false
-      x-category: marketplace
-      security:
-        - HeaderApiKey: []
-      tags:
-        - DBS Metadata
-      summary: Add GTIN to the Order
-      deprecated: true
-      description: "This method is deprecated. It will be removed on\_[April 13](https://dev.wildberries.ru/en/release-notes?id=378)\n"
-      parameters:
-        - $ref: '#/components/parameters/Order'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                gtin:
-                  type: string
-                  minLength: 13
-                  maxLength: 13
-                  description: GTIN
-                  example: '1234567890123'
-              required:
-                - gtin
-      responses:
-        '204':
-          description: Updated
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                IncorrectRequestBody:
-                  $ref: '#/components/examples/IncorrectRequestBody'
-                IncorrectRequest:
-                  $ref: '#/components/examples/IncorrectRequest'
-                IncorrectParameter:
-                  $ref: '#/components/examples/IncorrectParameter'
-        '401':
-          $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
-        '403':
-          $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Metadata update error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                FailedToUpdateMeta:
-                  $ref: '#/components/examples/FailedToUpdateMeta'
-        '429':
-          $ref: '#/components/responses/429'
 components:
   securitySchemes:
     HeaderApiKey:
@@ -2106,24 +1477,6 @@ components:
       name: Authorization
       in: header
   parameters:
-    OrderDBS:
-      name: orderId
-      in: path
-      required: true
-      description: Assembly order ID
-      schema:
-        type: integer
-        format: int64
-        example: 5632423
-    Order:
-      name: orderId
-      in: path
-      required: true
-      description: Assembly order ID
-      schema:
-        type: integer
-        format: int64
-        example: 5632423
     Next:
       name: next
       in: query
@@ -2164,16 +1517,6 @@ components:
     StatusMismatch:
       value:
         message: Status change is not allowed for the order
-    InvalidWBCode:
-      description: Invalid code
-      value:
-        code: InvalidWBCode
-        message: ''
-    SGTINIsNotFilled:
-      description: Required [Data Matrix Code](./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post) is not specified
-      value:
-        code: SGTINIsNotFilled
-        message: ''
   responses:
     '401':
       description: Unauthorized
@@ -2228,10 +1571,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:
@@ -2372,14 +1715,6 @@ components:
       example:
         orders:
           - 1234567890
-    Code:
-      properties:
-        code:
-          type: string
-          description: Confirmation code. Displayed to the buyer on the website and in the Wildberries app
-      type: object
-      example:
-        code: '123456'
     Next:
       type: integer
       format: int64
@@ -2460,16 +1795,17 @@ components:
           nullable: false
           example: RAL 3017
         rid:
-          type: string
-          nullable: false
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: f884001e44e511edb8780242ac120002
         createdAt:
           type: string
@@ -2633,16 +1969,17 @@ components:
           description: Color code (for tinted products only)
           example: RAL 3017
         rid:
-          type: string
-          nullable: false
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: f884001e44e511edb8780242ac120002
         createdAt:
           type: string
@@ -2844,54 +2181,6 @@ components:
                 type: integer
                 description: Assembly order ID
                 example: 1234567890
-    Meta:
-      type: object
-      description: Order metadata
-      nullable: true
-      properties:
-        imei:
-          type: object
-          properties:
-            value:
-              nullable: true
-              type: string
-              example: '123456789012345'
-          description: IMEI
-        uin:
-          type: object
-          properties:
-            value:
-              nullable: true
-              type: string
-              example: '123456789012345'
-          description: UIN
-        gtin:
-          type: object
-          properties:
-            value:
-              nullable: true
-              type: string
-              example: '123456789012345'
-          description: GTIN
-        sgtin:
-          type: object
-          properties:
-            value:
-              type: array
-              items:
-                type: string
-              example:
-                - '123456789012345'
-              nullable: true
-          description: Data Matrix code (Chestny ZNAK)
-        customsDeclaration:
-          type: object
-          properties:
-            value:
-              type: string
-              example: 10704010/010624/0000302
-              nullable: true
-          description: Customs declaration number
     api.OrdersMetaDeleteRequest:
       type: object
       required:
@@ -2900,8 +2189,14 @@ components:
       properties:
         key:
           type: string
+          enum:
+            - imei
+            - uin
+            - gtin
+            - sgtin
+            - customsDeclaration
           example: imei
-          description: Name of metadata to delete (**imei**, **uin**, **gtin**, **sgtin**). Only one value is passed
+          description: Name of metadata to delete. Only one value is passed
         orderIds:
           type: array
           description: Assembly orders IDs list
@@ -2978,7 +2273,7 @@ components:
           type: array
           minItems: 1
           maxItems: 24
-          description: List of Data Matrix codes. From 16 to 135 characters for one label
+          description: List of labeling codes Chestny ZNAK. From 16 to 135 characters for one label
           example:
             - '123456789012345678'
             - '1234567890123456'
@@ -3056,6 +2351,149 @@ components:
           type: integer
           description: Assembly order ID with successfully set data
           example: 123456
+    api.StatusSetDeliverResponses:
+      type: object
+      example:
+        requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+        results:
+          - orderId: 4299281547
+            isError: true
+            errors:
+              - code: 404
+                detail: NotFound
+          - orderId: 1234567890
+            isError: true
+            errors:
+              - code: 409
+                detail: MetaValidationFail
+                metaDetails:
+                  - key: sgtin
+                    value: 0102900304495480215KE
+                    decision: sgtinInvalidFormat
+          - orderId: 4279781545
+            isError: false
+      properties:
+        requestId:
+          type: string
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.StatusSetDeliverResponse'
+    api.StatusSetDeliverResponse:
+      type: object
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/api.BatchErrorDeliverResponse'
+          type: array
+          description: Error details
+        isError:
+          type: boolean
+          description: Are there any errors
+          example: true
+        orderId:
+          type: integer
+          description: Assembly order ID with successfully set data
+          example: 123456
+    api.OrdersMetaDetailsResponse:
+      type: object
+      required:
+        - requestId
+      properties:
+        requestId:
+          type: string
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+        orders:
+          type: array
+          description: Assembly orders metadata and validation statuses
+          items:
+            type: object
+            required:
+              - isError
+            properties:
+              orderId:
+                type: integer
+                example: 123456
+                description: Assembly order ID
+              isError:
+                type: boolean
+                description: Are there any errors
+                example: false
+              errors:
+                type: array
+                example: []
+                description: Error data
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      description: Error code
+                      example: 404
+                    detail:
+                      type: string
+                      example: NotFound
+                      description: Additional error data
+              metaDetails:
+                type: array
+                description: Metadata and their validation statuses
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: sgtin
+                      description: Metadata
+                    value:
+                      type: string
+                      nullable: true
+                      description: Metadata value
+                      example: '123456789012345'
+                    decision:
+                      type: string
+                      example: sgtinIntroduced
+                      description: |
+                        State:
+                        - `imei`
+                          - `pending` — Metadata for inspection
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+                          - `deadlineExceeded` — Validation passed
+                          - `imeiMaySell` — The product is approved for sale. Validation passed
+                          - `imeiSoldB2B` — The product was sold to a B2B buyer and allowed to be sold again. Validation passed
+                          - `required` — Required metadata is not filled. Validation failed
+                          - `imeiInvalidFormat` — Invalid format. Validation failed
+                          - `imeiAlreadySold` — The item with this IMEI has already been sold. Validation failed
+                        - `uin`
+                          - `filled` — Validation passed
+                          - `optional` — Metadata is not required
+                        - `sgtin`
+                          - `pending` — Metadata for inspection
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+                          - `deadlineExceeded` — Validation passed
+                          - `sgtinIntroduced` — The product is approved for sale. Validation passed
+                          - `sgtinSoldB2B` — The product was sold to a B2B buyer and allowed to be sold again. Validation passed
+                          - `required` — Required metadata is not filled. Validation failed
+                          - `sgtinInvalidFormat` — Invalid format. Validation failed
+                          - `sgtinNotFound` — Metadata not found in [Chestny ZNAK](https://chestnyznak.ru/en/). Validation failed
+                          - `sgtinEmitted` —  Metadata has been issued. Validation failed
+                          - `sgtinApplied` — Putting into circulation not completed. Validation failed
+                          - `sgtinWrittenOff` — Written off. Validation failed
+                          - `sgtinRetired` — Retired. Validation failed
+                          - `sgtinWithdrawn` — Withdrawn. Validation failed
+                          - `sgtinDisaggregation` — Disaggregation. Validation failed
+                          - `sgtinDisaggregated` — Disaggregated. Validation failed
+                          - `sgtinAppliedNotPaid` — Not paid. Validation failed
+                        - `gtin`
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+                        - `customsDeclaration`
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
     api.OrdersMetaResponse:
       type: object
       properties:
@@ -3182,6 +2620,55 @@ components:
           type: string
           description: Error title
           example: IncorrectRequest
+      type: object
+    api.BatchErrorDeliverResponse:
+      properties:
+        code:
+          type: integer
+          description: |
+            Error code:
+              - `404`
+              - `409`
+          example: 404
+        detail:
+          type: string
+          description: |
+            - `NotFound` —  assembly order is not found
+            - `StatusMismatch` — operation is not possible for this assembly order status
+            - `ImeiIsNotFilled` — IMEI is not filled
+            - `MetaValidationFail` — errors metadata validation
+          example: MetaValidationFail
+        metaDetails:
+          type: array
+          description: Metadata validation error details
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                description: Metadata
+                example: sgtin
+              value:
+                type: string
+                description: Metadata value
+                example: '1234567890'
+              decision:
+                type: string
+                description: |
+                  Статус проверки:
+                  - `sgtin`
+                    - `sgtinInvalidFormat` — Invalid format
+                    - `sgtinNotFound` — Metadata not found in [Chestny ZNAK](https://chestnyznak.ru/en/)
+                    - `sgtinEmitted` —  Metadata has been issued
+                    - `sgtinApplied` — Putting into circulation not completed
+                    - `sgtinWrittenOff` — Written off
+                    - `sgtinRetired` — Retired
+                    - `sgtinWithdrawn` — Withdrawn
+                    - `sgtinDisaggregation` — Disaggregation
+                    - `sgtinDisaggregated` — Disaggregated
+                    - `sgtinAppliedNotPaid` — Not paid
+                    - `pending` — Metadata for inspection
+                example: sgtinEmitted
       type: object
     api.BatchErrorResponse:
       properties:

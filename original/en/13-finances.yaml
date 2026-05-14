@@ -199,9 +199,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1 request | 1 min | 1 request |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1 request | 1 min | 1 request |
+        | Service | 1 min | 1 request | 1 min | 1 request |
+        | Base | 24 h | 2 requests | 12 h | 1 request |
         </div>
       requestBody:
         required: true
@@ -236,7 +239,7 @@ paths:
       security:
         - HeaderApiKey: []
       summary: Realization Sales Report
-      description: "This method is deprecated. It will be removed on\_[July 15](https://dev.wildberries.ru/en/release-notes?id=498).\n\n<div class=\"description_limit\">\n  <a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a> per one seller's account:\n\n  | Period | Limit | Interval | Burst |\n  | --- | --- | --- | --- |\n  | 1 minute | 1 request | 1 minute | 1 request |\n</div>\n"
+      description: "This method is deprecated. It will be removed on\_[July 15](https://dev.wildberries.ru/en/release-notes?id=498).\n\n<div class=\"description_limit\">\n<a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a> per one seller's account:\n\n\n| Type | Period | Limit | Interval | Burst |\n| --- | --- | --- | --- | --- |\n| Personal | 1 min | 1 request | 1 min | 10 requests |\n| Service | 1 min | 1 request | 1 min | 10 requests |\n| Base | 24 h | 2 requests | 12 h | 1 request |\n</div>\n"
       tags:
         - Financial Reports
       parameters:
@@ -1471,7 +1474,7 @@ components:
           example: 2816993144
         kiz:
           type: string
-          description: Labeling code
+          description: Labeling code [Chestny ZNAK](https://chestnyznak.ru/en)
           example: "0102900000376311210G2CIS?ehge)S\x1D91002A\x1D92F9Qof4FDo/31Icm14kmtuVYQzLypxm3HWkC1vQ/+pVVjm1dNAth1laFMoAGn7yEMWlTjxIe7lQnJqZ7TRZhlHQ=="
         isB2b:
           type: boolean
@@ -2075,7 +2078,7 @@ components:
           example: "0102900000376311210G2CIS?ehge)S\x1D91002A\x1D92F9Qof4FDo/31Icm14kmtuVYQzLypxm3HWkC1vQ/+pVVjm1dNAth1laFMoAGn7yEMWlTjxIe7lQnJqZ7TRZhlHQ=="
           type: string
           description: |
-            Labeling code.<br>
+            Labeling code [Chestny ZNAK](https://chestnyznak.ru/en).<br>
             The field will be in the response if value exists
         srid:
           example: 0f1c3999172603062979867564654dac5b702849
@@ -2230,10 +2233,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:

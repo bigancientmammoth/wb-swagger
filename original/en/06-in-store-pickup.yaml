@@ -439,6 +439,19 @@ paths:
       deprecated: true
       description: |
         This method is deprecated. It will be removed on [May 19](https://dev.wildberries.ru/en/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>In-Store Pickup assembly orders</strong> methods:
+
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -487,6 +500,19 @@ paths:
       deprecated: true
       description: |
         This method is deprecated. It will be removed on [May 19](https://dev.wildberries.ru/en/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>In-Store Pickup assembly orders</strong> methods:
+
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 50 requests | 72 s | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -754,6 +780,19 @@ paths:
       deprecated: true
       description: |
         This method is deprecated. It will be removed on [May 19](https://dev.wildberries.ru/en/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>In-Store Pickup assembly orders</strong> methods:
+
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -880,13 +919,13 @@ paths:
       x-category: marketplace
       tags:
         - In-Store Pickup Metadata
-      summary: Add Data Matrix Codes to the Assembly Orders (Chestny ZNAK)
+      summary: Add Labeling codes Chestny ZNAK to the Assembly Orders (Chestny ZNAK)
       description: |
-        The method sets Data Matrix codes (Chestny ZNAK) to the [assembly orders metadata](/openapi/in-store-pickup#tag/In-Store-Pickup-Metadata/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post).<br><br>
-        You can set the Data Matrix codes only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order metadata](/openapi/in-store-pickup#tag/In-Store-Pickup-Metadata/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post) method.<br>
-        You can get the uploaded Data Matrix codes in the [assembly orders metadata](/openapi/in-store-pickup#tag/In-Store-Pickup-Metadata/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post).
+        The method sets labeling code [Chestny ZNAK](https://chestnyznak.ru/en) to the [assembly orders metadata](/openapi/in-store-pickup#tag/In-Store-Pickup-Metadata/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post).<br><br>
+        You can set the labeling codes Chestny ZNAK only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order metadata](/openapi/in-store-pickup#tag/In-Store-Pickup-Metadata/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post) method.<br>
+        You can get the uploaded labeling codes in the [assembly orders metadata](/openapi/in-store-pickup#tag/In-Store-Pickup-Metadata/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1info/post).
 
-        For more information about Data Matrix Codes please check: https://chestnyznak.ru/en/.
+        For more information about labeling codes Chestny ZNAK please check: https://chestnyznak.ru/en/.
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup metadata</strong>:
@@ -1054,6 +1093,19 @@ paths:
       deprecated: true
       description: |
         This method is deprecated. It will be removed on [May 19](https://dev.wildberries.ru/en/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup metadata</strong>:
+
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 300 requests | 200 ms | 20 requests |
+        | Service | 1 min | 300 requests | 200 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -1183,6 +1235,19 @@ paths:
       deprecated: true
       description: |
         This method is deprecated. It will be removed on [May 19](https://dev.wildberries.ru/en/release-notes?id=474)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup metadata</strong>:
+
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Service | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
       parameters:
         - name: orderId
           in: path
@@ -1495,11 +1560,14 @@ components:
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
         createdAt:
           type: string
           description: Date and time the assembly order was created
@@ -1679,11 +1747,14 @@ components:
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: 5044304527347733263.0.0
         skus:
           type: array
@@ -1940,7 +2011,7 @@ components:
               example:
                 - '123456789012345'
               nullable: true
-          description: Data Matrix code
+          description: Labeling code [Chestny ZNAK](https://chestnyznak.ru/en)
         uin:
           type: object
           properties:
@@ -2238,7 +2309,7 @@ components:
         sgtin:
           type: array
           nullable: true
-          description: Data Matrix code (Chestny ZNAK)
+          description: Labeling code [Chestny ZNAK](https://chestnyznak.ru/en)
           items:
             type: string
             example: '123456789012345'
@@ -2255,8 +2326,13 @@ components:
       properties:
         key:
           type: string
+          enum:
+            - imei
+            - uin
+            - gtin
+            - sgtin
           example: imei
-          description: Metadata type to delete (`imei`, `uin`, `gtin`, `sgtin`). Only one value is passed
+          description: Metadata type to delete. Only one value is passed
         ordersIds:
           type: array
           description: Assembly orders IDs list
@@ -2320,10 +2396,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:

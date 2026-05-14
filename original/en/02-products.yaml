@@ -354,6 +354,21 @@ paths:
                               -  `1` — array of strings
                               -  `4` — number
                               -  `0` — characteristic is not used
+                        hasFilter:
+                          type: boolean
+                          description: |
+                            Key characteristic. Is it an important characteristic for buyers:
+                              - `true` — yes
+                              - `false` — no
+                        isVariable:
+                          type: boolean
+                          description: |
+                            A sign of variable characteristic. The value marks out the characteristics by which the variants differ from each other:
+                              - `true` — item variants differ by this characteristic
+                              - `false` — item variants do not differ by this characteristic
+                        existNamedField:
+                          type: boolean
+                          description: "How to transfer a characteristic in requests for [creating](./work-with-products/#tag/Creating-Product-Cards/paths/~1content~1v2~1cards~1upload/post),\_[creating with merge](./work-with-products/#tag/Creating-Product-Cards/paths/~1content~1v2~1cards~1upload~1add/post), and\_[editing](./work-with-products/#tag/Product-Cards/paths/~1content~1v2~1cards~1update/post) listings:\n  - `true` — as a separate parameter in the request\n  - `false` — in the `characteristics` array\n"
                   error:
                     type: boolean
                     description: Error flag
@@ -375,6 +390,9 @@ paths:
                       maxCount: 0
                       popular: false
                       charcType: 4
+                      hasFilter: true
+                      isVariable: true
+                      existNamedField: true
                   error: false
                   errorText: ''
                   additionalErrors: null
@@ -927,8 +945,8 @@ paths:
                         isKiz:
                           type: boolean
                           description: |
-                            - `true` - labeling code is required
-                            - `false` - labeling code is not required
+                            - `true` — [Chestny ZNAK](https://chestnyznak.ru/en) labeling code is required
+                            - `false` — labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is not required
                   error:
                     type: boolean
                     description: Error flag
@@ -1480,7 +1498,7 @@ paths:
                       "limit": 100
                     },
                     "filter": {
-                      "withPhoto": -1
+                      "withPhoto": 0
                     }
                   }
                 }</pre>
@@ -1542,18 +1560,25 @@ paths:
                         ascending:
                           type: boolean
                           default: false
-                          description: Sort by the `updatedAt` field (`false` - descending, `true` - ascending)
+                          description: |
+                            Sort by the `updatedAt` field:
+                              - `false` — descending
+                              -  `true` — ascending
                     filter:
                       description: Filters
                       type: object
                       properties:
                         withPhoto:
                           type: integer
+                          enum:
+                            - 0
+                            - 1
+                            - -1
                           description: |
                             Photo:
-                              * `0` — only cards without photos
+                              * `0` — only cards without photos. Starting from [June 3](https://dev.wildberries.ru/en/release-notes?id=527) — any cards
                               * `1` — only cards with photos
-                              * `-1` — all cards
+                              * `-1` — any cards. Starting from [June 3](https://dev.wildberries.ru/en/release-notes?id=527) — only cards without photos
                           default: 0
                         textSearch:
                           type: string
@@ -1565,7 +1590,9 @@ paths:
                             type: integer
                         allowedCategoriesOnly:
                           description: |
-                            Category: true — permitted, false — forbidden
+                            Category:
+                              - `true` — permitted
+                              - `false` — forbidden
                           type: boolean
                         objectIDs:
                           type: array
@@ -1614,7 +1641,7 @@ paths:
                     - уллу
                     - EkkE
                   imtID: 328632
-                  withPhoto: -1
+                  withPhoto: 0
                 cursor:
                   updatedAt: '2023-12-06T11:17:00.96577Z'
                   nmID: 370870300
@@ -1666,7 +1693,7 @@ paths:
                           description: Product description
                         needKiz:
                           description: |
-                            Is [labeling code](https://chestnyznak.ru/en) required for the product:
+                            Is labeling code [Chestny ZNAK](https://chestnyznak.ru/en) required for the product:
                             <br>
                               - `false` — labeling code is not required
                             <br>
@@ -1677,11 +1704,11 @@ paths:
                           default: false
                           nullable: false
                           description: |
-                            Is there the confirmation from the seller that required [labeling code](https://chestnyznak.ru/en) is applied to the product:
+                            Is there the confirmation from the seller that required labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is applied to the product:
                               - `true` — yes
                               - `false` — no
 
-                            Whether labeling code is required is specified in the `needKiz` field
+                            Whether labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is required is specified in the `needKiz` field
                         photos:
                           type: array
                           description: Photo array
@@ -2100,11 +2127,11 @@ paths:
                     type: boolean
                     default: false
                     description: |
-                      Confirmation that required [labeling code](https://chestnyznak.ru/en) is specified:
+                      Confirmation that required labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is specified:
                         - `true` — the seller confirms that required labeling code is applied to the product.
                         - `false` — the seller does not confirm that required labeling code is applied to the product. Pass `true` in the request to confirm that the product has required labeling code. The item will not pass moderation if there is no confirmation from the seller that required labeling code is applied to the product.
 
-                      To check if labeling code is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
+                      To check if labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
                   brand:
                     type: string
                     description: Brand
@@ -2278,7 +2305,7 @@ paths:
                     description: Text of the HTTP status code
               example:
                 title: request body too long
-                detail: https://openapi.{{ .baseDomain }}/content/api/ru/
+                detail: https://openapi.wildberries.ru/content/api/ru/
                 code: 71d3de1b-001e-488f-bbf5-55c31254fbeb
                 requestId: MN8usr6RfrzWHZfucSvNgb
                 origin: s2s-api-auth-content
@@ -2420,7 +2447,7 @@ paths:
         A card will remain for sale as long as there is any inventory left, even if moved to the trash. To completely remove the card from sale, set its inventory to zero.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
         | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
@@ -2507,11 +2534,14 @@ paths:
         </div>
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 3 requests | 20 s | 5 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 3 requests | 20 s | 5 requests |
+        | Service | 1 min | 3 requests | 20 s | 5 requests |
+        | Base | 1 h | 2 requests | 30 min | 1 request |
         </div>
       tags:
         - Product Cards
@@ -2669,7 +2699,7 @@ paths:
                         ascending:
                           type: boolean
                           default: false
-                          description: "`trashedAt`: true — ascending, false\_— descending\n"
+                          description: "Sorting by `trashedAt` field:\n  - `true` — ascending\n  - `false`\_— descending\n"
                     cursor:
                       description: Paginator
                       type: object
@@ -2727,11 +2757,11 @@ paths:
                           default: false
                           nullable: false
                           description: |
-                            Is there the confirmation from the seller that required [labeling code](https://chestnyznak.ru/en) is applied to the product:
+                            Is there the confirmation from the seller that required labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is applied to the product:
                               - `true` — yes
                               - `false` — no
 
-                            To check if labeling code is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
+                            To check if labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
                         subjectID:
                           type: integer
                           description: Subject ID
@@ -3123,11 +3153,11 @@ paths:
                           type: boolean
                           default: false
                           description: |
-                            Confirmation that required [labeling code](https://chestnyznak.ru/en) is specified:
+                            Confirmation that required labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is specified:
                               - `true` — the seller confirms that required labeling code is applied to the product.
                               - `false` — the seller does not confirm that required labeling code is applied to the product. Pass `true` in the request to confirm that the product has required labeling code. The item will not pass moderation if there is no confirmation from the seller that required labeling code is applied to the product.
 
-                            To check if labeling code is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
+                            To check if labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
                         wholesale:
                           type: object
                           description: Wholesale
@@ -3277,7 +3307,7 @@ paths:
                     description: Text of the HTTP status code
               example:
                 title: request body too long
-                detail: https://openapi.{{ .baseDomain }}/content/api/ru/
+                detail: https://openapi.wildberries.ru/content/api/ru/
                 code: 71d3de1b-001e-488f-bbf5-55c31254fbeb
                 requestId: MN8usr6RfrzWHZfucSvNgb
                 origin: s2s-api-auth-content
@@ -3304,9 +3334,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 10 requests | 6 s | 5 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 10 requests | 6 s | 5 requests |
+        | Service | 1 min | 10 requests | 6 s | 5 requests |
+        | Base | 2 h | 1 request | 2 h | 1 request |
         </div>
       requestBody:
         content:
@@ -3339,11 +3372,11 @@ paths:
                         type: boolean
                         default: false
                         description: |
-                          Confirmation that required [labeling code](https://chestnyznak.ru/en) is specified:
+                          Confirmation that required labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is specified:
                             - `true` — the seller confirms that required labeling code is applied to the product.
                             - `false` — the seller does not confirm that required labeling code is applied to the product. Pass `true` in the request to confirm that the product has required labeling code. The item will not pass moderation if there is no confirmation from the seller that required labeling code is applied to the product.
 
-                          To check if labeling code is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
+                          To check if labeling code [Chestny ZNAK](https://chestnyznak.ru/en) is required, use the [Product Cards List](./work-with-products#tag/Product-Cards/paths/~1content~1v2~1get~1cards~1list/post) method, the response field `needKiz`
                       wholesale:
                         type: object
                         description: Wholesale
@@ -3543,7 +3576,7 @@ paths:
                     description: Text of the HTTP status code
               example:
                 title: request body too long
-                detail: https://openapi.{{ .baseDomain }}/content/api/ru/
+                detail: https://openapi.wildberries.ru/content/api/ru/
                 code: 71d3de1b-001e-488f-bbf5-55c31254fbeb
                 requestId: MN8usr6RfrzWHZfucSvNgb
                 origin: s2s-api-auth-content
@@ -3923,10 +3956,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       requestBody:
         $ref: '#/components/requestBodies/SupplierTaskRequestClubDisc'
@@ -4000,10 +4035,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/uploadID'
@@ -4049,10 +4086,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/limit'
@@ -4100,10 +4139,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/uploadID'
@@ -4149,10 +4190,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/limit'
@@ -4316,10 +4359,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/limit'
@@ -4375,10 +4420,12 @@ paths:
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods in the <strong>Prices and Discounts</strong> category:
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 6 s | 10 requests | 600 ms | 5 requests |
 
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 6 s | 10 requests | 600 ms | 5 requests |
+        | Service | 6 s | 10 requests | 600 ms | 5 requests |
+        | Base | 1 h | 4 requests | 15 min | 1 request |
         </div>
       parameters:
         - $ref: '#/components/parameters/limit'
@@ -4489,6 +4536,8 @@ paths:
                   $ref: '#/components/examples/IncorrectRequest'
                 IncorrectParameter:
                   $ref: '#/components/examples/IncorrectParameter'
+                SKUUploadDisabled:
+                  $ref: '#/components/examples/SKUUploadDisabled'
         '401':
           $ref: '#/components/responses/401'
         '402':
@@ -4587,6 +4636,8 @@ paths:
                   $ref: '#/components/examples/IncorrectRequest'
                 IncorrectParameter:
                   $ref: '#/components/examples/IncorrectParameter'
+                IncorrectSkuParameter:
+                  $ref: '#/components/examples/SKUUploadDisabled'
         '401':
           $ref: '#/components/responses/401'
         '402':
@@ -4644,6 +4695,7 @@ paths:
               properties:
                 chrtIds:
                   type: array
+                  maxItems: 1000
                   description: Size IDs array
                   items:
                     type: integer
@@ -4686,6 +4738,8 @@ paths:
                   $ref: '#/components/examples/IncorrectRequest'
                 IncorrectParameter:
                   $ref: '#/components/examples/IncorrectParameter'
+                IncorrectSkuParameter:
+                  $ref: '#/components/examples/SKUUploadDisabled'
         '401':
           $ref: '#/components/responses/401'
         '402':
@@ -5702,6 +5756,7 @@ components:
           description: Seller's article
         sizeID:
           type: integer
+          nullable: true
           example: 54483342
           description: Size ID. In the Content methods this is the `chrtID` field
         techSizeName:
@@ -5844,6 +5899,7 @@ components:
         newPrice:
           type: number
           format: float
+          nullable: true
           example: 134
           description: New seller's price before discount
         oldPrice:
@@ -5854,6 +5910,7 @@ components:
         newDiscount:
           type: integer
           example: 25
+          nullable: true
           description: New seller's discount, %
         oldDiscount:
           type: integer
@@ -6321,10 +6378,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:
@@ -6427,10 +6484,12 @@ components:
                 properties:
                   uploadID:
                     type: integer
+                    nullable: true
                     description: Upload ID
                     example: 3235236546
                   historyGoods:
                     type: array
+                    nullable: true
                     description: Data of products in the upload
                     items:
                       $ref: '#/components/schemas/GoodHistory'
@@ -6682,6 +6741,10 @@ components:
       value:
         code: IncorrectParameter
         message: IncorrectParameter
+    SKUUploadDisabled:
+      value:
+        code: SKUUploadDisabled
+        message: Uploading stock is not allowed by 'sku'. Please use the 'chrtId' key
     creatingOneCard:
       description: ''
       value:

@@ -83,7 +83,7 @@ paths:
         You can get data for a specified period, maximum of 30 calendar days per request.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -161,7 +161,7 @@ paths:
         <br>
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -221,7 +221,7 @@ paths:
         The method returns buyers information by order IDs.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -284,7 +284,7 @@ paths:
         | -------  | ---------                 | --------------------------------------|
         | `new`      | **New order** | |
         | `confirm`  | **Order on assembly**      |  [Transfer to assembly](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1confirm/patch)
-        | `complete`  | **Order on delivery**<br>    | [Transfer to delivery](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1assemble/patch)
+        | `complete`  | **Order on delivery**<br>    | [Transfer to delivery](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbw~1orders~1status~1assemble/post)
         | `receive`  | **Received by the buyer**<br>       | Changed by the courier
         | `reject`   | **Declined upon receipt**<br>           |  Changed by the courier
         | `cancel`   | **Canceled by the seller**   |  [Cancel the order](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1cancel/patch)
@@ -302,7 +302,7 @@ paths:
         - `postponed_delivery` — courier delivery is postponed
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -397,7 +397,7 @@ paths:
         Transfers the assembly order to the `confirm` status — on assembly.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -471,7 +471,7 @@ paths:
           - 400x300 px, with `width=40&height=30` in request
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -590,22 +590,25 @@ paths:
           $ref: '#/components/responses/AccessDenied'
         '429':
           $ref: '#/components/responses/429'
-  /api/v3/dbw/orders/{orderId}/assemble:
+  /api/marketplace/v3/dbw/orders/status/deliver:
     servers:
       - url: https://marketplace-api.wildberries.ru
-    patch:
+    post:
       x-readonly-method: false
       x-category: marketplace
-      security:
-        - HeaderApiKey: []
       tags:
         - DBW Assembly Orders
-      summary: Transfer to Delivery
+      summary: Transfer Assembly Orders to Delivery
       description: |
-        Transfers the [assembly order](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders/get) to the [status](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders~1status/post) `complete` — in delivery.
+        The method transfers [assembly orders](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders/get) with the `confirm` [status](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders~1status/post) to the `complete` status — in delivery.
+
+        <div class="description_important">
+        Check the method response. Assembly orders that have been successfully transferred to delivery will be returned with the flag "isError": false.
+        For all other assembly orders, see the error reason in the errors array.
+        </div>
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
@@ -618,11 +621,33 @@ paths:
 
         One request with a response code of <code>409</code> is counted as 10 requests
         </div>
-      parameters:
-        - $ref: '#/components/parameters/Order'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
-        '204':
-          description: Confirmed
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+              example:
+                requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+                results:
+                  - orderId: 42131238
+                    isError: true
+                    errors:
+                      - code: 409
+                        detail: MetaValidationFail
+                        metaDetails:
+                          - key: sgtin
+                            value: '1234567890123'
+                            decision: sgtinInvalidFormat
+                  - orderId: 4279781545
+                    isError: false
         '400':
           description: Bad request
           content:
@@ -632,23 +657,14 @@ paths:
               examples:
                 IncorrectParameter:
                   $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
         '401':
           $ref: '#/components/responses/401'
-        '402':
-          $ref: '#/components/responses/402'
         '403':
           $ref: '#/components/responses/AccessDenied'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          description: Error updating a status
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                StatusMismatch:
-                  $ref: '#/components/examples/StatusMismatch'
         '429':
           $ref: '#/components/responses/429'
   /api/v3/dbw/orders/courier:
@@ -726,16 +742,19 @@ paths:
         Moves the assembly order to `cancel` status — canceled by the seller.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for the DBW methods:
         <ul>
             <li>for getting and updating contact lists</li>
             <li>for getting and deleting metadata</li>
-            <li>assembly orders</li>
+            <li>for managing assembly orders</li>
         </ul>
 
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 300 requests | 200 ms | 20 requests |
+        | Service | 1 min | 300 requests | 200 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
 
         One request with a response code of <code>409</code> is counted as 10 requests
         </div>
@@ -772,10 +791,56 @@ paths:
                   $ref: '#/components/examples/StatusMismatch'
         '429':
           $ref: '#/components/responses/429'
-  /api/v3/dbw/orders/{orderId}/meta:
+  /api/v3/dbw/orders/{orderId}/assemble:
     servers:
       - url: https://marketplace-api.wildberries.ru
-    get:
+    patch:
+      x-readonly-method: false
+      x-category: marketplace
+      security:
+        - HeaderApiKey: []
+      tags:
+        - DBW Assembly Orders
+      summary: Transfer to Delivery
+      deprecated: true
+      description: "This method is deprecated. It will be removed on\_[June 5](https://dev.wildberries.ru/en/release-notes?id=517)\n"
+      parameters:
+        - $ref: '#/components/parameters/Order'
+      responses:
+        '204':
+          description: Confirmed
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+        '401':
+          $ref: '#/components/responses/401'
+        '402':
+          $ref: '#/components/responses/402'
+        '403':
+          $ref: '#/components/responses/AccessDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Error updating a status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+        '429':
+          $ref: '#/components/responses/429'
+  /api/marketplace/v3/dbw/orders/meta/details:
+    servers:
+      - url: https://marketplace-api.wildberries.ru
+    post:
       x-readonly-method: true
       x-category: marketplace
       security:
@@ -784,7 +849,7 @@ paths:
         - DBW Metadata
       summary: Get Order Metadata
       description: |
-        Returns assembly order metadata.
+        Returns [assembly orders](/openapi/orders-dbw#tag/DBW-Assembly-Orders) metadata and their validation statuses.
         <br><br>
         The list of metadata available for the assembly order can be obtained in the [list of new assembly orders](/openapi/orders-dbw#tag/DBW-Assembly-Orders/paths/~1api~1v3~1dbw~1orders~1new/get), field `requiredMeta`.
         <br><br>
@@ -803,6 +868,132 @@ paths:
         | 1 min | 300 requests | 200 ms | 20 requests |
 
         </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OrdersMetaDetailsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+        '429':
+          $ref: '#/components/responses/429'
+  /api/marketplace/v3/dbw/orders/meta/delete:
+    servers:
+      - url: https://marketplace-api.wildberries.ru
+    post:
+      x-readonly-method: false
+      x-category: marketplace
+      tags:
+        - DBW Metadata
+      summary: Delete Assembly Orders Metadata
+      description: |
+        Removes all [assembly order metadata](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1marketplace~1v3~1dbw~1orders~1meta~1details/post) values.
+        <br><br>
+        You can only delete one type of metadata in one request.
+        Specify the metadata type in the request:
+        - `imei` — [IMEI](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1meta~1imei/put)
+        - `uin` — [UIN](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1meta~1uin/put)
+        - `gtin` — [GTIN](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1meta~1gtin/put)
+        - `sgtin` — [Data Matrix code](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1marketplace~1v3~1dbw~1orders~1meta~1sgtin/post)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <ul>
+            <li>for getting and updating contact lists</li>
+            <li>for getting and deleting metadata</li>
+            <li>assembly orders</li>
+        </ul>
+
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersMetaDleteRequestV2'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.MetaDeleteResponses'
+                example:
+                  requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+                  results:
+                    - orderId: 42131238
+                      isError: true
+                      errors:
+                        - code: 409
+                          detail: FailedToUpdateMeta
+                    - orderId: 4279781545
+                      isError: false
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/AccessDenied'
+        '429':
+          $ref: '#/components/responses/429'
+  /api/v3/dbw/orders/{orderId}/meta:
+    servers:
+      - url: https://marketplace-api.wildberries.ru
+    get:
+      x-readonly-method: true
+      x-category: marketplace
+      security:
+        - HeaderApiKey: []
+      tags:
+        - DBW Metadata
+      summary: Get Order Metadata
+      deprecated: true
+      description: "This method is deprecated. It will be removed on\_[July 27](https://dev.wildberries.ru/en/release-notes?id=508)\n\n<div class=\"description_limit\">\n<a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a>  per one seller's account for DBW methods:\n<ul>\n    <li>for getting and updating contact lists</li>\n    <li>for getting and deleting metadata</li>\n    <li>assembly orders</li>\n</ul>\n\n\n| Period | Limit | Interval | Burst |\n| --- | --- | --- | --- |\n| 1 min | 300 requests | 200 ms | 20 requests |\n\n</div>\n"
       parameters:
         - $ref: '#/components/parameters/Order'
       responses:
@@ -842,25 +1033,9 @@ paths:
         - HeaderApiKey: []
       tags:
         - DBW Metadata
+      deprecated: true
       summary: Delete Order Metadata
-      description: |
-        Removes all order metadata values for the passed key. Possible metadata is `imei`, `uin`, `gtin`, `sgtin`.
-
-        <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
-        <ul>
-            <li>for getting and updating contact lists</li>
-            <li>for getting and deleting metadata</li>
-            <li>assembly orders</li>
-        </ul>
-
-
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 300 requests | 200 ms | 20 requests |
-
-        One request with a response code of <code>409</code> is counted as 10 requests
-        </div>
+      description: "This method is deprecated. It will be removed on\_[June 5](https://dev.wildberries.ru/en/release-notes?id=517)\n"
       parameters:
         - $ref: '#/components/parameters/Order'
         - name: key
@@ -899,6 +1074,77 @@ paths:
                   $ref: '#/components/examples/FailedToUpdateMeta'
         '429':
           $ref: '#/components/responses/429'
+  /api/marketplace/v3/dbw/orders/meta/sgtin:
+    servers:
+      - url: https://marketplace-api.wildberries.ru
+    post:
+      x-readonly-method: false
+      x-category: marketplace
+      tags:
+        - DBW Metadata
+      summary: Add Labeling Codes Chestny ZNAK to Assembly Orders
+      description: |
+        Sets the labeling code [Chestny ZNAK](https://chestnyznak.ru/en) for the assembly orders. <br>
+        You can set the labeling code Chestny ZNAK only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order metadata](orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1details/post) method.
+        <br>
+        For more information about labeling code Chestny ZNAK please check: https://chestnyznak.ru/en/.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a>  per one seller's account for DBW methods:
+        <ul>
+            <li>for getting and updating contact lists</li>
+            <li>for getting and deleting metadata</li>
+            <li>assembly orders</li>
+        </ul>
+
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersSGTINsSetRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+              example:
+                requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+                results:
+                  - orderId: 42131238
+                    isError: true
+                    errors:
+                      - code: 409
+                        detail: FailedToUpdateMeta
+                  - orderId: 4279781545
+                    isError: false
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/AccessDenied'
+        '429':
+          $ref: '#/components/responses/429'
   /api/v3/dbw/orders/{orderId}/meta/sgtin:
     servers:
       - url: https://marketplace-api.wildberries.ru
@@ -909,21 +1155,9 @@ paths:
         - HeaderApiKey: []
       tags:
         - DBW Metadata
+      deprecated: true
       summary: Add Data Matrix Code to the Order
-      description: |
-        This method allows you to assign a Data Matrix code (Chestny ZNAK marking) to an order. <br> The assignment of a Data Matrix code to an order is only possible if this field is returned in the response of the [Get order metadata](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1meta/get) method and the order is in the `confirm` status.
-
-        <br> <br> You can retrieve the uploaded Data Matrix code using the [Get order metadata](/openapi/orders-dbw#tag/DBW-Metadata/paths/~1api~1v3~1dbw~1orders~1%7BorderId%7D~1meta/get) method. <br> For more information about Data Matrix Codes please check: https://chestnyznak.ru/en/ <br>
-
-        <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding metadata</strong> <strong>DBW</strong> model:
-
-        | Period | Limit | Interval | Burst |
-        | --- | --- | --- | --- |
-        | 1 min | 1000 requests | 60 ms | 20 requests |
-
-        One request with a response code of <code>409</code> is counted as 10 requests
-        </div>
+      description: "This method is deprecated. It will be removed on\_[June 5](https://dev.wildberries.ru/en/release-notes?id=517)\n"
       parameters:
         - $ref: '#/components/parameters/Order'
       requestBody:
@@ -991,7 +1225,7 @@ paths:
         Sets the UIN for the order. The order can only have one UIN. You can add the code only for orders in the `confirmed` status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding metadata</strong> <strong>DBW</strong> model:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBW metadata</strong>:
 
         | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
@@ -1065,7 +1299,7 @@ paths:
         Sets the IMEI for the order. The order can have only one IMEI. You can add the code only for orders in the `confirmed` status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding metadata</strong> <strong>DBW</strong> model:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBW metadata</strong>:
 
         | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
@@ -1139,7 +1373,7 @@ paths:
         Sets the GTIN (Belarus product unique identifier) for the order. The order can only have one GTIN. You can add the code only for orders in the `confirmed` status.
 
          <div class="description_limit">
-        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding metadata</strong> <strong>DBW</strong> model:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBW metadata</strong>:
 
         | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
@@ -1311,10 +1545,10 @@ components:
                 description: Error title
               detail:
                 type: string
-                description: Error details. The error means that the service from the [Catalog](https://dev.wildberries.ru/business-solutions) has insufficient funds on its balance
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
-            detail: please top up your balance in your company personal account https://dev.{{ .baseDomain }}/company
+            detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
       description: Too many requests
       content:
@@ -1375,6 +1609,204 @@ components:
             code: AccessDenied
             message: ''
   schemas:
+    api.OrdersSGTINsSetRequest:
+      type: object
+      required:
+        - orders
+      properties:
+        orders:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/api.SGTINs'
+    api.SGTINs:
+      type: object
+      properties:
+        orderId:
+          description: Assembly order ID
+          type: integer
+          example: 123456
+        sgtins:
+          type: array
+          minItems: 1
+          maxItems: 24
+          description: List of labeling codes Chestny ZNAK. From 16 to 135 characters for one label
+          example:
+            - '123456789012345678'
+            - '1234567890123456'
+          items:
+            type: string
+    api.StatusSetResponses:
+      type: object
+      required:
+        - results
+      example:
+        requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+        results:
+          - orderId: 4299281547
+            isError: true
+            errors:
+              - code: 404
+                detail: NotFound
+          - orderId: 4279781545
+            isError: false
+      properties:
+        requestId:
+          type: string
+          description: Unique ID of the request with errors.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/api.StatusSetResponse'
+    api.StatusSetResponse:
+      type: object
+      required:
+        - isError
+        - orderId
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/api.BatchErrorResponse'
+          type: array
+          description: Error details
+        isError:
+          type: boolean
+          description: Are there any errors
+          example: true
+        orderId:
+          type: integer
+          description: Assembly order ID with successfully set data
+          example: 123456
+    api.BatchErrorResponse:
+      required:
+        - code
+        - detail
+      properties:
+        code:
+          type: integer
+          description: |
+            Error code:
+              - `404`
+              - `409`
+          example: 404
+        detail:
+          type: string
+          description: |
+            - `NotFound` —  assembly order is not found
+            - `StatusMismatch` — operation is not possible for this assembly order status
+            - `ImeiIsNotFilled` — IMEI is not filled
+            - `MetaValidationFail` — errors metadata validation
+          example: NotFound
+        metaDetails:
+          type: array
+          description: Metadata validation error details
+          items:
+            type: object
+            required:
+              - decision
+              - key
+            properties:
+              key:
+                type: string
+                description: Metadata
+                example: sgtin
+              value:
+                type: string
+                nullable: true
+                description: Metadata value
+                example: '1234567890'
+              decision:
+                type: string
+                description: |
+                  Статус проверки:
+                  - `sgtin`
+                    - `sgtinInvalidFormat` — Invalid format
+                    - `sgtinNotFound` — Metadata not found in [Chestny ZNAK](https://chestnyznak.ru/en/)
+                    - `sgtinEmitted` —  Metadata has been issued
+                    - `sgtinApplied` — Putting into circulation not completed
+                    - `sgtinWrittenOff` — Written off
+                    - `sgtinRetired` — Retired
+                    - `sgtinWithdrawn` — Withdrawn
+                    - `sgtinDisaggregation` — Disaggregation
+                    - `sgtinDisaggregated` — Disaggregated
+                    - `sgtinAppliedNotPaid` — Not paid
+                    - `pending` — Metadata for inspection
+                example: sgtinEmitted
+      type: object
+    api.MetaDeleteResponses:
+      type: object
+      required:
+        - results
+      properties:
+        requestId:
+          type: string
+          description: Unique request ID. Displayed for responses with errors
+        results:
+          type: array
+          items:
+            type: object
+            required:
+              - isError
+              - orderId
+            properties:
+              errors:
+                items:
+                  type: object
+                  required:
+                    - code
+                    - detail
+                  properties:
+                    code:
+                      type: integer
+                      description: |
+                        Error code:
+                          - `404`
+                          - `409`
+                    detail:
+                      type: string
+                      description: |
+                        - `NotFound` —  assembly order is not found
+                        - `StatusMismatch` — operation is not possible for this assembly order status
+                        - `ImeiIsNotFilled` — IMEI is not filled
+                type: array
+                description: Error details
+              isError:
+                type: boolean
+                description: Are there any errors
+              orderId:
+                type: integer
+                description: Assembly order ID with successfully set data
+    api.OrdersRequestV2:
+      type: object
+      properties:
+        ordersIds:
+          type: array
+          maxItems: 1000
+          example:
+            - 1234678898
+          items:
+            type: integer
+          description: List of assembly order IDs
+    api.OrdersMetaDleteRequestV2:
+      type: object
+      properties:
+        key:
+          type: string
+          enum:
+            - imei
+            - uin
+            - gtin
+            - sgtin
+          description: Name of metadata to delete. Only one value is passed
+          example: sgtin
+        ordersIds:
+          type: array
+          maxItems: 1000
+          items:
+            type: integer
+          description: List of assembly order IDs
+          example:
+            - 123456789
     ClientInfo:
       properties:
         replacementPhone:
@@ -1514,6 +1946,122 @@ components:
           description: Date and time of the courier information update. <br> If `null`, the information has not been updated
           nullable: true
           example: '2025-09-06T11:33:10+03:00'
+    api.OrdersMetaDetailsResponse:
+      type: object
+      required:
+        - requestId
+      properties:
+        requestId:
+          type: string
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+        orders:
+          type: array
+          description: Assembly orders metadata and validation statuses
+          items:
+            type: object
+            required:
+              - isError
+            properties:
+              orderId:
+                type: integer
+                example: 123456
+                description: Assembly order ID
+              isError:
+                type: boolean
+                description: Are there any errors
+                example: false
+              errors:
+                type: array
+                example: []
+                description: Error data
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      description: Error code
+                      example: 404
+                    detail:
+                      type: string
+                      example: NotFound
+                      description: Additional error data
+              metaDetails:
+                type: array
+                description: Metadata and their validation statuses
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: sgtin
+                      description: Metadata
+                    value:
+                      type: string
+                      nullable: true
+                      description: Metadata value
+                      example: '123456789012345'
+                    decision:
+                      type: string
+                      example: sgtinIntroduced
+                      description: |
+                        State:
+                        - `imei`
+                          - `pending` — Metadata for inspection
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+                          - `deadlineExceeded` — Validation passed
+                          - `imeiMaySell` — The product is approved for sale. Validation passed
+                          - `imeiSoldB2B` — The product was sold to a B2B buyer and allowed to be sold again. Validation passed
+                          - `required` — Required metadata is not filled. Validation failed
+                          - `imeiInvalidFormat` — Invalid format. Validation failed
+                          - `imeiAlreadySold` — The item with this IMEI has already been sold. Validation failed
+                        - `uin`
+                          - `filled` — Validation passed
+                          - `optional` — Metadata is not required
+                        - `sgtin`
+                          - `pending` — Metadata for inspection
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+                          - `deadlineExceeded` — Validation passed
+                          - `sgtinIntroduced` — The product is approved for sale. Validation passed
+                          - `sgtinSoldB2B` — The product was sold to a B2B buyer and allowed to be sold again. Validation passed
+                          - `required` — Required metadata is not filled. Validation failed
+                          - `sgtinInvalidFormat` — Invalid format. Validation failed
+                          - `sgtinNotFound` — Metadata not found in [Chestny ZNAK](https://chestnyznak.ru/en/). Validation failed
+                          - `sgtinEmitted` —  Metadata has been issued. Validation failed
+                          - `sgtinApplied` — Putting into circulation not completed. Validation failed
+                          - `sgtinWrittenOff` — Written off. Validation failed
+                          - `sgtinRetired` — Retired. Validation failed
+                          - `sgtinWithdrawn` — Withdrawn. Validation failed
+                          - `sgtinDisaggregation` — Disaggregation. Validation failed
+                          - `sgtinDisaggregated` — Disaggregated. Validation failed
+                          - `sgtinAppliedNotPaid` — Not paid. Validation failed
+                        - `gtin`
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+                        - `customsDeclaration`
+                          - `optional` — Metadata is not required
+                          - `filled` — Validation passed
+    api.BatchError:
+      properties:
+        detail:
+          type: object
+          description: Error details
+          example: {}
+        origin:
+          type: string
+          description: WB internal service ID
+          example: dbs-public-api
+        requestId:
+          type: string
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+        title:
+          type: string
+          description: Error title
+          example: IncorrectRequest
+      type: object
     Error:
       type: object
       nullable: false
@@ -1640,11 +2188,14 @@ components:
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: f884001e44e511edb8780242ac120002
         createdAt:
           type: string
@@ -1780,11 +2331,14 @@ components:
           description: |
             Unique order ID. <br>
             Note: `rid` corresponds to `srid` in the responses of the methods:
-              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
               - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
               - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
               - [Goods Return Report](./reports#tag/Goods-Return-Report)
-              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: f884001e44e511edb8780242ac120002
         createdAt:
           type: string

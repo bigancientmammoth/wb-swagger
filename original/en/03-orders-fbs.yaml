@@ -394,8 +394,9 @@ paths:
         - FBS Assembly Orders
       summary: Get Assembly Orders
       description: |
-        Returns assembly orders information without current status. <br>You can get data for a specified period, maximum of 30 calendar days per request.
-
+        The method returns information about assembly orders created no more than 3 months ago, without their current status <br>
+        To get data for a period, specify the start and end dates of the period in the request. Maximum of 30 calendar days per request. The method's response will contain assembly orders created during the specified period.<br><br>
+        To get assembly orders created more than 3 months ago, use the method for getting the [list of archived assembly orders](/openapi/orders-fbs#tag/FBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1fbs~1orders~1archive/get).
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>FBS assembly orders, supplies and passes</strong> methods:
 
@@ -413,12 +414,12 @@ paths:
           schema:
             type: integer
           description: |
-            Period start date in Unix timestamp format. By default date is 30 days before the request
+            Period start date in Unix timestamp format. By default date is 30 days before the request. Time zone — UTC
         - name: dateTo
           in: query
           schema:
             type: integer
-          description: Period end date in Unix timestamp format
+          description: Period end date in Unix timestamp format. Time zone — UTC
       responses:
         '200':
           description: Success
@@ -540,6 +541,14 @@ paths:
                           nullable: false
                           description: Assembly order ID
                           example: 5632423
+                        isCancellable:
+                          type: boolean
+                          nullable: false
+                          description: |
+                            Whether assembly order [cancellation](./orders-fbs#tag/FBS-Assembly-Orders/paths/~1api~1v3~1orders~1%7BorderId%7D~1cancel/patch) is available:
+                              - `false` — not available
+                              - `true` — available
+                          example: false
                         supplierStatus:
                           type: string
                           nullable: false
@@ -662,6 +671,11 @@ paths:
       summary: Cancel the Assembly Order
       description: |
         Moves the assembly orders to `cancel` ("Canceled by the supplier") status.
+
+        <div class="description_important">
+        You can cancel an assembly order before it is handed over to Wildberries.
+        To check whether an assembly order can be canceled, use the <a href ="https://dev.wildberries.ru/en/docs/openapi/orders-fbs/#tag/FBS-Assembly-Orders/paths/~1api~1v3~1orders~1status/post">POST /api/v3/orders/status</a> method and the <code>isCancellable</code> field.
+        </div>
 
         <div class="description_limit">
         <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
@@ -962,7 +976,13 @@ paths:
           in: query
           schema:
             type: string
-          description: Name of the metadata to remove (`imei`, `uin`, `gtin`, `sgtin`, `customsDeclaration`)
+            enum:
+              - imei
+              - uin
+              - gtin
+              - sgtin
+              - customsDeclaration
+          description: Name of the metadata to remove
       responses:
         '204':
           description: Deleted
@@ -3446,7 +3466,7 @@ components:
           type: string
           format: date-time
           nullable: false
-          description: Assembly order creation date (RFC3339)
+          description: Assembly order creation date (RFC3339). Time zone — UTC
           example: '2022-05-04T07:56:29Z'
         offices:
           type: array
@@ -3672,7 +3692,7 @@ components:
         ddate:
           type: string
           description: |
-            Planned delivery date. <br>
+            Planned delivery date of the order to the buyer. <br>
             The field is displayed for assembly orders with over dimensional products `ODC`, `cargoType: 2`
           nullable: false
           example: 17.05.2024
